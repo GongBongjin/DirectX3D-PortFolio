@@ -16,9 +16,10 @@ public:
 	void GUIRender();
 
 	void SetTarget(Transform* target);
+	bool IsCollision(Ray ray, Vector3& hitPoint);
 
 private:
-	void IsCollision();
+	void Collision();
 	void Spawn();
 
 private:

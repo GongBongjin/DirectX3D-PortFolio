@@ -22,6 +22,7 @@ public:
     virtual void GUIRender() = 0;
 
     void Spawn(Vector3 pos);
+    void Hitted();
 
     CapsuleCollider* GetCollider() { return collider; }
     Transform* GetTransform() { return transform; }

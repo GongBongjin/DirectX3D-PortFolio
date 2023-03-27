@@ -3,14 +3,14 @@
 Terrain::Terrain()
     : GameObject(L"Landscape/Terrain.hlsl"), width(10), height(10)
 {    
-    material->SetDiffuseMap(L"Textures/Landscape/Dirt2.png");
-    //material->SetSpecularMap(L"Textures/Landscape/Fieldstone_SM.tga");
-    //material->SetNormalMap(L"Textures/Landscape/Fieldstone_NM.tga");
+    material->SetDiffuseMap(L"Textures/Landscape/GrassUV01.png");
+    //material->SetSpecularMap(L"Textures/Landscape/");
+    material->SetNormalMap(L"Textures/Landscape/GrassUV01_N.png");
       
     heightMap = Texture::Add(L"Textures/HeightMaps/MainHeightMap.png");
     alphaMap = Texture::Add(L"Textures/AlphaMaps/AlphaMap.png");
-    secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
-    thirdMap = Texture::Add(L"Textures/Landscape/Dirt3.png");
+    secondMap = Texture::Add(L"Textures/Landscape/GroundStones01.png");
+    thirdMap = Texture::Add(L"Textures/Landscape/GroundCracked01.png");
 
     mesh = new Mesh<VertexType>();
     MakeMesh();

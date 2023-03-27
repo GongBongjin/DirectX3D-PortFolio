@@ -14,6 +14,8 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
+	if (!transform->Active()) return;
+
 	collider->UpdateWorld();
 }
 
@@ -36,6 +38,12 @@ void Enemy::Spawn(Vector3 pos)
 	curHp = maxHp;
 
 	transform->Pos() = pos;
+}
+
+void Enemy::Hitted()
+{
+	transform->SetActive(false);
+	collider->SetActive(false);
 }
 
 void Enemy::SetState(State state)

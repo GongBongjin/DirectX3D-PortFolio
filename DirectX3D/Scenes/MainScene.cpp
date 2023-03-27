@@ -15,11 +15,11 @@ MainScene::MainScene()
 	CAM->TargetOptionLoad("test");
 	//CAM->LookAtTarget();
 
+	BulletManager::Get();
 	EnemyManager::Get();
 	//EnemyManager::Get()->SetTarget(revenant);
 
 	skybox = new Skybox(L"Textures/Landscape/BlueSky.dds");
-
 }
 
 MainScene::~MainScene()
@@ -27,6 +27,8 @@ MainScene::~MainScene()
 	delete terrain;
 
 	delete revenant;
+
+	BulletManager::Delete();
 
 	EnemyManager::Delete();
 
@@ -39,6 +41,8 @@ void MainScene::Update()
 
 	revenant->Update();
 
+	BulletManager::Get()->Update();
+
 	EnemyManager::Get()->Update();
 }
 
@@ -48,12 +52,14 @@ void MainScene::PreRender()
 
 void MainScene::Render()
 {
-	skybox->Render();
-
+	//skybox->Render();
+	
 	terrain->Render();
 
 	revenant->Render();
-
+	
+	BulletManager::Get()->Render();
+	
 	EnemyManager::Get()->Render();
 }
 
@@ -67,6 +73,8 @@ void MainScene::GUIRender()
 	//terrain->GUIRender();
 
 	revenant->GUIRender();
+
+	BulletManager::Get()->GUIRender();
 
 	EnemyManager::Get()->GUIRender();
 }

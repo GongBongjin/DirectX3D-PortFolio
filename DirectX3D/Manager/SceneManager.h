@@ -22,4 +22,6 @@ private:
     map<string, Scene*> scenes;
 
     list<Scene*> curScenes;
+
+    string addScene, removeScene;
 };

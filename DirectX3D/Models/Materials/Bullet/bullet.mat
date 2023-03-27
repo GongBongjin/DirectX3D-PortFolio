@@ -1,0 +1,10 @@
+<Material Name="bullet">
+    <Shader Vertex="" Pixel="Shaders/Light/Light.hlsl"/>
+    <Texture Diffuse="Models\Materials\Bullet\Bullet_D.png" Specular="Textures/Color/White.png" Normal="Models\Materials\Bullet\Bullet_N.png"/>
+    <Property Shininess="6.3117919" HasNormalMap="1">
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Specular R="0.5" G="0.5" B="0.5" A="1"/>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

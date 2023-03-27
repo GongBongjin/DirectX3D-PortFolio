@@ -46,8 +46,9 @@ Texture* Texture::Add(wstring file)
 
     wstring extension = GetExtension(file);
     
-    //if (extension == L"tga")
-    if (extension.compare(L"tga") == 0)
+    if (extension.compare(L"TGA") == 0)
+        result = LoadFromTGAFile(file.c_str(), nullptr, image);
+    else if (extension.compare(L"tga") == 0)
         result = LoadFromTGAFile(file.c_str(), nullptr, image);
     else if(extension.compare(L"dds") == 0)
         result = LoadFromDDSFile(file.c_str(), DDS_FLAGS_NONE, nullptr, image);

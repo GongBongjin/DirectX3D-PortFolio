@@ -269,7 +269,7 @@ void Material::SelectMap(string name, MapType type)
 
     if (ImGui::ImageButton(textureID, ImVec2(50, 50)))
     {
-        DIALOG->OpenDialog(this->name + name, name, ".png,.jpg,.tga", ".");
+        DIALOG->OpenDialog(this->name + name, name, ".TGA,.png,.jpg,.tga", ".");
     }
 
     if (DIALOG->Display(this->name + name))

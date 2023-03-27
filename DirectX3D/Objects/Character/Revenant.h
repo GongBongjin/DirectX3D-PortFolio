@@ -30,6 +30,7 @@ private:
 
     void SetState(State state);
 
+    void Shoot();
 //Event Function
 private:
     void EndShoot();

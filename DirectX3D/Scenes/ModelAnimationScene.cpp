@@ -3,9 +3,18 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-    modelAnimator = new ModelAnimator("Revenant");
-    modelAnimator->ReadClip("MoveForward");
+    modelAnimator = new ModelAnimator("Super");
+    //modelAnimator->GetMesh(0)->SetMaterial(modelAnimator->AddMaterial("Body"));
+    //modelAnimator->GetMesh(1)->SetMaterial(modelAnimator->AddMaterial("Arms"));
+    //modelAnimator->GetMesh(2)->SetMaterial(modelAnimator->AddMaterial("Jacket"));
+    //modelAnimator->GetMesh(3)->SetMaterial(modelAnimator->AddMaterial("Gun"));
+    //modelAnimator->GetMesh(4)->SetMaterial(modelAnimator->AddMaterial("Darkness"));
+    //modelAnimator->GetMesh(7)->SetMaterial(modelAnimator->AddMaterial("Weapon"));
+
+    modelAnimator->ReadClip("Idle");
     //modelAnimator->ReadClip("Attack");
+    //modelAnimator->ReadClip("MoveForward");
+
     //modelAnimator->ReadClip("Arms", 3);
     //modelAnimator->ReadClip("Arms", 4);
     //modelAnimator->ReadClip("Arms", 5);

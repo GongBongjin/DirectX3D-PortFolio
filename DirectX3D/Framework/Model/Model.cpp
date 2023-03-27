@@ -50,6 +50,18 @@ Material* Model::AddMaterial()
     return material;
 }
 
+Material* Model::AddMaterial(string materialName)
+{
+    Material* material = new Material(L"Light/Light.hlsl");
+    string savePath = "Models/Materials/" + name + "/";
+    string file = savePath + materialName + ".mat";
+    material->Load(file);
+
+    materials.push_back(material);
+
+    return material;
+}
+
 void Model::ReadMaterial()
 {
     string file = "Models/Materials/" + name + "/" + name + ".mats";

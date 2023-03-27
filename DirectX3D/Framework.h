@@ -180,6 +180,7 @@ using namespace GameMath;
 
 #include "Objects/Weapon/Crowbar.h"
 #include "Objects/Weapon/Kunai.h"
+#include "Objects/Weapon/Bullet.h"
 
 #include "Objects/Character/Revenant.h"
 #include "Objects/Character/Enemy.h"
@@ -188,6 +189,7 @@ using namespace GameMath;
 #include "Objects/Character/MinionSuper.h"
 
 #include "Objects/Manager/EnemyManager.h"
+#include "Objects/Manager/BulletManager.h"
 #include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/ParticleManager.h"
 

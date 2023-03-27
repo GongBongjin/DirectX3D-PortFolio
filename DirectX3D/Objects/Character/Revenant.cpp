@@ -2,6 +2,13 @@
 
 Revenant::Revenant() : ModelAnimator("Revenant")
 {
+    GetMesh(0)->SetMaterial(AddMaterial("Body"));
+    GetMesh(1)->SetMaterial(AddMaterial("Arms"));
+    GetMesh(2)->SetMaterial(AddMaterial("Jacket"));
+    GetMesh(3)->SetMaterial(AddMaterial("Gun"));
+    GetMesh(4)->SetMaterial(AddMaterial("Darkness"));
+    GetMesh(7)->SetMaterial(AddMaterial("Weapon"));
+    
     ClientToScreen(hWnd, &clientCenterPos);
     SetCursorPos(clientCenterPos.x, clientCenterPos.y);
 
@@ -13,6 +20,8 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     ReadClip("Attack");
     ReadClip("MoveForward");
 
+    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.1f);
+    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.6f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::EndShoot, this), 1.0f);
 }
 
@@ -41,7 +50,7 @@ void Revenant::PostRender()
 
 void Revenant::GUIRender()
 {
-    Model::GUIRender();
+    //Model::GUIRender();
 }
 
 void Revenant::Control()
@@ -118,7 +127,7 @@ void Revenant::Attack()
         SetState(ATTACK);
 
         Ray ray = CAM->ScreenPointToRay(mousePos);
-        //isTarget = RobotManager::Get()->IsCollision(ray, targetPos);
+        isTarget = EnemyManager::Get()->IsCollision(ray, targetPos);
     }
 }
 
@@ -144,6 +153,18 @@ void Revenant::SetState(State state)
 
     curState = state;
     PlayClip(state);
+}
+
+void Revenant::Shoot()
+{
+    Vector3 dir = Forward();
+
+    if (isTarget)
+    {
+        dir = targetPos;
+    }
+
+    BulletManager::Get()->Shoot(Pos()+Vector3(0,1.5f,0), dir.GetNormalized());
 }
 
 void Revenant::EndShoot()

@@ -11,9 +11,12 @@ public:
 
     void SetShader(wstring file);
     Material* AddMaterial();
+    Material* AddMaterial(string materialName);
     ModelMesh* GetMesh(UINT index) { return meshes[index]; }
-    
-
+ 
+    string GetName() { return name; }
+    vector<Material*> GetMaterials() { return materials; }
+    UINT GetMeshNum() { return meshes.size()-1; }
 private:
     void ReadMaterial();
     void ReadMesh();

@@ -53,6 +53,8 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Update()
 {
+	Collision();
+
 	spawnTime += DELTA;
 
 	if (spawnTime > SPAWN_TIME)
@@ -101,8 +103,35 @@ void EnemyManager::SetTarget(Transform* target)
 		enemy->SetTarget(target);
 }
 
-void EnemyManager::IsCollision()
+bool EnemyManager::IsCollision(Ray ray, Vector3& hitPoint)
 {
+	Contact contact;
+	float minDistance = FLT_MAX;
+
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->GetCollider()->IsRayCollision(ray, &contact))
+		{
+			if (contact.distance < minDistance)
+			{
+				minDistance = contact.distance;
+				hitPoint = contact.hitPoint;
+			}
+		}
+	}
+	return false;
+}
+
+void EnemyManager::Collision()
+{
+	for (Enemy* enemy : enemies)
+	{
+		if (BulletManager::Get()->IsCollision(enemy->GetCollider()))
+		{
+			enemy->Hitted();
+			return;
+		}
+	}
 }
 
 void EnemyManager::Spawn()

@@ -216,6 +216,7 @@
     <ClInclude Include="Objects\Landscape\Terrain.h" />
     <ClInclude Include="Objects\Landscape\TerrainEditor.h" />
     <ClInclude Include="Objects\Landscape\Water.h" />
+    <ClInclude Include="Objects\Manager\BulletManager.h" />
     <ClInclude Include="Objects\Manager\EnemyManager.h" />
     <ClInclude Include="Objects\Manager\KunaiManager.h" />
     <ClInclude Include="Objects\Manager\ParticleManager.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Objects\Character\Revenant.h" />
     <ClInclude Include="Objects\UI\ProgressBar.h" />
+    <ClInclude Include="Objects\Weapon\Bullet.h" />
     <ClInclude Include="Objects\Weapon\Crowbar.h" />
     <ClInclude Include="Objects\Weapon\Kunai.h" />
     <ClInclude Include="Resource.h" />
@@ -319,6 +321,7 @@
     <ClCompile Include="Objects\Landscape\Terrain.cpp" />
     <ClCompile Include="Objects\Landscape\TerrainEditor.cpp" />
     <ClCompile Include="Objects\Landscape\Water.cpp" />
+    <ClCompile Include="Objects\Manager\BulletManager.cpp" />
     <ClCompile Include="Objects\Manager\EnemyManager.cpp" />
     <ClCompile Include="Objects\Manager\KunaiManager.cpp" />
     <ClCompile Include="Objects\Manager\ParticleManager.cpp" />
@@ -335,6 +338,7 @@
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
+    <ClCompile Include="Objects\Weapon\Bullet.cpp" />
     <ClCompile Include="Objects\Weapon\Crowbar.cpp" />
     <ClCompile Include="Objects\Weapon\Kunai.cpp" />
     <ClCompile Include="Scenes\GridScene.cpp" />
