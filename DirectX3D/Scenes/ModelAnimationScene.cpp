@@ -11,9 +11,9 @@ ModelAnimationScene::ModelAnimationScene()
     //modelAnimator->GetMesh(4)->SetMaterial(modelAnimator->AddMaterial("Darkness"));
     //modelAnimator->GetMesh(7)->SetMaterial(modelAnimator->AddMaterial("Weapon"));
 
-    modelAnimator->ReadClip("Idle");
+    //modelAnimator->ReadClip("Idle");
     //modelAnimator->ReadClip("Attack");
-    //modelAnimator->ReadClip("MoveForward");
+    modelAnimator->ReadClip("MoveForward");
 
     //modelAnimator->ReadClip("Arms", 3);
     //modelAnimator->ReadClip("Arms", 4);

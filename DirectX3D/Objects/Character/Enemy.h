@@ -6,7 +6,7 @@ protected:
     enum State
     {
         IDLE,
-        WALK,
+        MOVE,
         ATTACK,
         HIT,
         DYING
@@ -31,6 +31,9 @@ public:
 
     void SetState(State state);
 
+private:
+    void Move();
+
 protected:
     Vector3 pos;
     Transform* transform;
@@ -43,7 +46,7 @@ protected:
     ProgressBar* hpBar;
     Transform* target;
 
-    float speed = 50.0f;
+    float speed = 1.0f;
     float maxHp = 100.0f;
     float curHp = 100.0f;
 

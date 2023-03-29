@@ -218,7 +218,6 @@
     <ClInclude Include="Objects\Landscape\Water.h" />
     <ClInclude Include="Objects\Manager\BulletManager.h" />
     <ClInclude Include="Objects\Manager\EnemyManager.h" />
-    <ClInclude Include="Objects\Manager\KunaiManager.h" />
     <ClInclude Include="Objects\Manager\ParticleManager.h" />
     <ClInclude Include="Objects\MineCraft\BlockManager.h" />
     <ClInclude Include="Objects\MineCraft\MineUI.h" />
@@ -323,7 +322,6 @@
     <ClCompile Include="Objects\Landscape\Water.cpp" />
     <ClCompile Include="Objects\Manager\BulletManager.cpp" />
     <ClCompile Include="Objects\Manager\EnemyManager.cpp" />
-    <ClCompile Include="Objects\Manager\KunaiManager.cpp" />
     <ClCompile Include="Objects\Manager\ParticleManager.cpp" />
     <ClCompile Include="Objects\MineCraft\BlockManager.cpp" />
     <ClCompile Include="Objects\MineCraft\MineUI.cpp" />

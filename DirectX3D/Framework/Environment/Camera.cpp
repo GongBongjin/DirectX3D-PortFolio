@@ -116,6 +116,7 @@ Ray Camera::ScreenPointToRay(Vector3 screenPoint)
     screenPoint = XMVector3TransformNormal(screenPoint, world);
 
     Ray ray;
+    
     ray.pos = Pos();
     ray.dir = screenPoint.GetNormalized();
 

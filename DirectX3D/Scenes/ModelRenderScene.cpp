@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-    model = new Model("Super");
+    model = new Model("Revenant");
     model->Rot().x = XM_PIDIV2;
     //model->GetMesh(0)->SetMaterial(model->AddMaterial("Body"));
     //model->GetMesh(1)->SetMaterial(model->AddMaterial("Arms"));

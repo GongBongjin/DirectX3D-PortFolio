@@ -190,7 +190,6 @@ using namespace GameMath;
 
 #include "Objects/Manager/EnemyManager.h"
 #include "Objects/Manager/BulletManager.h"
-#include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/ParticleManager.h"
 
 //Scene Header

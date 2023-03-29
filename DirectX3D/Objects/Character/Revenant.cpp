@@ -8,10 +8,14 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     GetMesh(3)->SetMaterial(AddMaterial("Gun"));
     GetMesh(4)->SetMaterial(AddMaterial("Darkness"));
     GetMesh(7)->SetMaterial(AddMaterial("Weapon"));
+
+    gun = new Transform();
+    gunShotPos = new SphereCollider();
+    gunShotPos->SetParent(gun);
     
     ClientToScreen(hWnd, &clientCenterPos);
     SetCursorPos(clientCenterPos.x, clientCenterPos.y);
-
+    
     crossHair = new Quad(L"Textures/UI/cursor.png");
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
     crossHair->UpdateWorld();
@@ -20,14 +24,18 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     ReadClip("Attack");
     ReadClip("MoveForward");
 
-    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.1f);
-    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.6f);
+    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.0f);
+    GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.75f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::EndShoot, this), 1.0f);
 }
 
 Revenant::~Revenant()
 {
-    //delete crossHair;
+    delete gun;
+
+    delete crossHair;
+
+    delete gunShotPos;
 }
 
 void Revenant::Update()
@@ -35,7 +43,11 @@ void Revenant::Update()
     Control();
     SetAnimation();
 
+    gun->SetWorld(GetTransformByNode(75));
+
     ModelAnimator::Update();
+
+    gunShotPos->UpdateWorld();
 }
 
 void Revenant::Render()
@@ -45,12 +57,13 @@ void Revenant::Render()
 
 void Revenant::PostRender()
 {
-    //crossHair->Render();
+    crossHair->Render();
 }
 
 void Revenant::GUIRender()
 {
     //Model::GUIRender();
+    gun->GUIRender();
 }
 
 void Revenant::Control()
@@ -128,6 +141,7 @@ void Revenant::Attack()
 
         Ray ray = CAM->ScreenPointToRay(mousePos);
         isTarget = EnemyManager::Get()->IsCollision(ray, targetPos);
+        //추가해야할 내용 - 타깃과의 충돌이 아니고 허공에 쏠시, 터레인과의 충돌 구현
     }
 }
 
@@ -157,14 +171,12 @@ void Revenant::SetState(State state)
 
 void Revenant::Shoot()
 {
-    Vector3 dir = Forward();
+    Vector3 dir = CAM->Forward();
 
     if (isTarget)
-    {
-        dir = targetPos;
-    }
+        dir = targetPos - gunShotPos->GlobalPos();
 
-    BulletManager::Get()->Shoot(Pos()+Vector3(0,1.5f,0), dir.GetNormalized());
+    BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
 }
 
 void Revenant::EndShoot()

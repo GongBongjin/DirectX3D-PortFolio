@@ -225,9 +225,6 @@
     <ClInclude Include="Framework\Model\ModelAnimatorInstancing.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Manager\KunaiManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Weapon\Kunai.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -513,9 +510,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Weapon\Kunai.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Manager\KunaiManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\UI\ProgressBar.cpp">

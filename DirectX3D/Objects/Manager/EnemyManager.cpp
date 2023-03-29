@@ -6,6 +6,7 @@ EnemyManager::EnemyManager()
 
 	enemyInstancing[0] = new ModelAnimatorInstancing("First");
 	enemyInstancing[0]->ReadClip("Idle");
+	enemyInstancing[0]->ReadClip("MoveForward");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[0]->Add();
@@ -18,6 +19,7 @@ EnemyManager::EnemyManager()
 
 	enemyInstancing[1] = new ModelAnimatorInstancing("Second");
 	enemyInstancing[1]->ReadClip("Idle");
+	enemyInstancing[1]->ReadClip("MoveForward");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[1]->Add();
@@ -30,6 +32,7 @@ EnemyManager::EnemyManager()
 
 	enemyInstancing[2] = new ModelAnimatorInstancing("Super");
 	enemyInstancing[2]->ReadClip("Idle");
+	enemyInstancing[2]->ReadClip("MoveForward");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[2]->Add();
@@ -119,7 +122,7 @@ bool EnemyManager::IsCollision(Ray ray, Vector3& hitPoint)
 			}
 		}
 	}
-	return false;
+	return minDistance != FLT_MAX;
 }
 
 void EnemyManager::Collision()

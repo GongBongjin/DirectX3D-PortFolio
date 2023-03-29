@@ -38,6 +38,8 @@ private:
 
 private:
     Transform* root;
+    Transform* gun;
+    SphereCollider* gunShotPos;
     CapsuleCollider* bodyCollider;
 
     float moveSpeed = 10.0f;
@@ -53,4 +55,6 @@ private:
 
     Quad* crossHair;
     Terrain* terrain;
+
+    
 };

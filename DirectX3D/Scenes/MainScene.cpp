@@ -13,11 +13,11 @@ MainScene::MainScene()
 
 	CAM->SetTarget(revenant);
 	CAM->TargetOptionLoad("test");
-	//CAM->LookAtTarget();
+	CAM->LookAtTarget();
 
 	BulletManager::Get();
 	EnemyManager::Get();
-	//EnemyManager::Get()->SetTarget(revenant);
+	EnemyManager::Get()->SetTarget(revenant);
 
 	skybox = new Skybox(L"Textures/Landscape/BlueSky.dds");
 }
