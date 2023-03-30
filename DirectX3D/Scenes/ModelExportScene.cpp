@@ -25,23 +25,30 @@ ModelExportScene::ModelExportScene()
     //exporter->ExportClip(clipName);
     //delete exporter;
     //
-    clipName = "MoveForward";
+    //clipName = "Attack1";
+    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
+    //
+    //
+    //clipName = "MoveForward";
+    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
+    //
+    clipName = "Hitted";
     file = "Models/Animations/" + name + "/" + clipName + ".fbx";
     exporter = new ModelExporter(name, file);
     exporter->ExportClip(clipName);
     delete exporter;
-    //
-    //clipName = "Hit";
-    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
-    //exporter = new ModelExporter(name, file);
-    //exporter->ExportClip(clipName);
-    //delete exporter;
-    //
-    //clipName = "StandUp";
-    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
-    //exporter = new ModelExporter(name, file);
-    //exporter->ExportClip(clipName);
-    //delete exporter;
+    
+    clipName = "Dying";
+    file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+    exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+    delete exporter;
 }
 
 ModelExportScene::~ModelExportScene()

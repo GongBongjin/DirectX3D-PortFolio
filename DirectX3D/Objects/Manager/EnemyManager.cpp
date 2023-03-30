@@ -7,6 +7,10 @@ EnemyManager::EnemyManager()
 	enemyInstancing[0] = new ModelAnimatorInstancing("First");
 	enemyInstancing[0]->ReadClip("Idle");
 	enemyInstancing[0]->ReadClip("MoveForward");
+	enemyInstancing[0]->ReadClip("Attack");
+	enemyInstancing[0]->ReadClip("Attack1");
+	enemyInstancing[0]->ReadClip("Hitted");
+	enemyInstancing[0]->ReadClip("Dying");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[0]->Add();
@@ -20,6 +24,10 @@ EnemyManager::EnemyManager()
 	enemyInstancing[1] = new ModelAnimatorInstancing("Second");
 	enemyInstancing[1]->ReadClip("Idle");
 	enemyInstancing[1]->ReadClip("MoveForward");
+	enemyInstancing[1]->ReadClip("Attack");
+	enemyInstancing[1]->ReadClip("Attack1");
+	enemyInstancing[1]->ReadClip("Hitted");
+	enemyInstancing[1]->ReadClip("Dying");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[1]->Add();
@@ -33,6 +41,10 @@ EnemyManager::EnemyManager()
 	enemyInstancing[2] = new ModelAnimatorInstancing("Super");
 	enemyInstancing[2]->ReadClip("Idle");
 	enemyInstancing[2]->ReadClip("MoveForward");
+	enemyInstancing[2]->ReadClip("Attack");
+	enemyInstancing[2]->ReadClip("Attack1");
+	enemyInstancing[2]->ReadClip("Hitted");
+	enemyInstancing[2]->ReadClip("Dying");
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[2]->Add();
@@ -93,7 +105,7 @@ void EnemyManager::GUIRender()
 {
 	for (Enemy* enemy : enemies)
 	{
-		enemy->GetTransform()->GUIRender();
+		//enemy->GetTransform()->GUIRender();
 		enemy->GUIRender();
 	}
 }

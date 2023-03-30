@@ -3,8 +3,8 @@
 
 MainScene::MainScene()
 {
-	terrain = new Terrain();
-	terrain->SetTag("Terrain");
+	//terrain = new Terrain();
+	//terrain->SetTag("Terrain");
 
 	revenant = new Revenant();
 	revenant->SetTag("Revenant");
@@ -24,7 +24,7 @@ MainScene::MainScene()
 
 MainScene::~MainScene()
 {
-	delete terrain;
+	//delete terrain;
 
 	delete revenant;
 
@@ -37,7 +37,7 @@ MainScene::~MainScene()
 
 void MainScene::Update()
 {
-	terrain->UpdateWorld();
+	//terrain->UpdateWorld();
 
 	revenant->Update();
 
@@ -54,7 +54,7 @@ void MainScene::Render()
 {
 	//skybox->Render();
 	
-	terrain->Render();
+	//terrain->Render();
 
 	revenant->Render();
 	
@@ -74,7 +74,7 @@ void MainScene::GUIRender()
 
 	revenant->GUIRender();
 
-	BulletManager::Get()->GUIRender();
+	//BulletManager::Get()->GUIRender();
 
 	EnemyManager::Get()->GUIRender();
 }

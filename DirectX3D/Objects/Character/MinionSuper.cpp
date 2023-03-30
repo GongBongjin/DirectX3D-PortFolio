@@ -9,6 +9,8 @@ MinionSuper::MinionSuper(Transform* transform, ModelAnimatorInstancing* instanci
 	collider->SetParent(root);
 	collider->Pos() = { 0.0f, 110.0f, 15.0f };
 	collider->Scale() = { 60.0f, 50.0f, 60.0f };
+
+	speed = 4.0f;
 }
 
 MinionSuper::~MinionSuper()

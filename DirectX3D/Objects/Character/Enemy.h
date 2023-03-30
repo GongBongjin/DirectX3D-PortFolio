@@ -2,13 +2,14 @@
 
 class Enemy
 {
-protected:
+public:
     enum State
     {
         IDLE,
         MOVE,
         ATTACK,
-        HIT,
+        ATTACK1,
+        HITTED,
         DYING
     }curState = IDLE;
 
@@ -22,7 +23,6 @@ public:
     virtual void GUIRender() = 0;
 
     void Spawn(Vector3 pos);
-    void Hitted();
 
     CapsuleCollider* GetCollider() { return collider; }
     Transform* GetTransform() { return transform; }
@@ -31,8 +31,25 @@ public:
 
     void SetState(State state);
 
+    void SetEvent(int clip, Event event, float timeRatio);
+    void ExcuteEvent();
+
 private:
     void Move();
+    void Attack();
+    void Dead();
+
+//Event Fucntion
+private:
+    void ComboAttack();
+    void SetIdle();
+
+public:
+    void Hitted();
+
+private:
+    void EndDyingDC();
+    void EndDyingDT();
 
 protected:
     Vector3 pos;
@@ -46,9 +63,12 @@ protected:
     ProgressBar* hpBar;
     Transform* target;
 
-    float speed = 1.0f;
-    float maxHp = 100.0f;
+    float speed;
     float curHp = 100.0f;
+    float maxHp = 100.0f;
+
+    float attackRange = 3.0f;
+    float chaseRange = 100.0f;
 
     Vector3 velocity;
     Vector3 barPos;

@@ -118,7 +118,8 @@ void Revenant::Move()
     Matrix rotY = XMMatrixRotationY(Rot().y);
     Vector3 direction = XMVector3TransformCoord(velocity, rotY);
 
-    Pos().y = terrain->GetHeight(this->Pos(), nullptr);
+    //Pos().y = terrain->GetHeight(this->Pos(), nullptr);
+    Pos().y = 0;
     Pos() -= direction * moveSpeed * DELTA;
 }
 
