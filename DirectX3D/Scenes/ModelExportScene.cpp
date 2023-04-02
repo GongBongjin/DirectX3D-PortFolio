@@ -3,15 +3,15 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "Super";
+    string name = "Boss";
     string file = "Models/FBX/" + name + ".fbx";
     ModelExporter* exporter;
     string clipName;
 
-    //exporter = new ModelExporter(name, file);
-    //exporter->ExportMaterial();
-    //exporter->ExportMesh();
-    //delete exporter;    
+    exporter = new ModelExporter(name, file);
+    exporter->ExportMaterial();
+    exporter->ExportMesh();
+    delete exporter;    
   
     //clipName = "Idle";
     //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
@@ -38,17 +38,17 @@ ModelExportScene::ModelExportScene()
     //exporter->ExportClip(clipName);
     //delete exporter;
     //
-    clipName = "Hitted";
-    file = "Models/Animations/" + name + "/" + clipName + ".fbx";
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
-    
-    clipName = "Dying";
-    file = "Models/Animations/" + name + "/" + clipName + ".fbx";
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
+    //clipName = "Hitted";
+    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
+    //
+    //clipName = "Dying";
+    //file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
 }
 
 ModelExportScene::~ModelExportScene()

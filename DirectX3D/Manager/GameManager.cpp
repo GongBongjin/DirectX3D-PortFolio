@@ -12,15 +12,17 @@
 
 #include "Scenes/MainScene.h"
 
+#include "Scenes/BossScene.h"
+
 GameManager::GameManager()
 {
     Create();
 
     SceneManager::Get()->Create("Grid", new GridScene());
-    //SceneManager::Get()->Create("ModelExport", new ModelExportScene());
-    //SceneManager::Get()->Create("Start", new ModelRenderScene());
+    SceneManager::Get()->Create("ModelExport", new ModelExportScene());
+    SceneManager::Get()->Create("Start", new ModelRenderScene());
     //SceneManager::Get()->Create("Start", new ModelAnimationScene());
-    SceneManager::Get()->Create("Start", new MainScene());
+    //SceneManager::Get()->Create("Start", new MainScene());
 
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");

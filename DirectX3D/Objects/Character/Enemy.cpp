@@ -11,7 +11,7 @@ Enemy::Enemy(Transform* transform, ModelAnimatorInstancing* instancing, UINT ind
 	SetEvent(ATTACK1, bind(&Enemy::SetIdle, this), 0.9f);
 	SetEvent(HITTED, bind(&Enemy::SetIdle, this), 0.9f);
 	SetEvent(DYING, bind(&Enemy::EndDyingDC, this), 0.0f);
-	SetEvent(DYING, bind(&Enemy::EndDyingDT, this), 1.0f);
+	SetEvent(DYING, bind(&Enemy::EndDyingDT, this), 0.9f);
 	
 	FOR(totalEvent.size())
 	{
@@ -143,6 +143,8 @@ void Enemy::ComboAttack()
 
 void Enemy::SetIdle()
 {
+	if (curState == DYING) return;
+
 	SetState(IDLE);
 }
 
@@ -151,7 +153,7 @@ void Enemy::Hitted()
 	if (curState == DYING) return;
 
 	SetState(HITTED);
-	curHp -= 100.0f;
+	curHp -= 20.0f;
 }
 
 void Enemy::EndDyingDC()

@@ -55,6 +55,4 @@ private:
 
     Quad* crossHair;
     Terrain* terrain;
-
-    
 };

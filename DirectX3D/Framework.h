@@ -187,6 +187,7 @@ using namespace GameMath;
 #include "Objects/Character/MinionFirst.h"
 #include "Objects/Character/MinionSecond.h"
 #include "Objects/Character/MinionSuper.h"
+#include "Objects/Character/Boss.h"
 
 #include "Objects/Manager/EnemyManager.h"
 #include "Objects/Manager/BulletManager.h"
