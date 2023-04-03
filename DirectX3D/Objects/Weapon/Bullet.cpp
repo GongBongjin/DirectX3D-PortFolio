@@ -3,8 +3,8 @@
 Bullet::Bullet(Transform* transform)
 	:transform(transform)
 {
-	transform->Scale() = { 0.1f,0.1f,0.1f };
-	transform->Load();
+	transform->Scale() = { 0.3f,0.3f,0.3f };
+	//transform->Load();
 
 	collider = new CapsuleCollider();
 	collider->SetParent(transform);

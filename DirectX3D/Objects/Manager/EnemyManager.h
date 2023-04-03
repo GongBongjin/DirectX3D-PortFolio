@@ -18,6 +18,10 @@ public:
 	void SetTarget(Transform* target);
 	bool IsCollision(Ray ray, Vector3& hitPoint);
 
+	//test
+	void GetTerrain(Terrain* terrain) { this->terrain = terrain; }
+	void GetAStar(AStar* aStar) { this->aStar = aStar; }
+
 private:
 	void Collision();
 	void Spawn();
@@ -29,4 +33,7 @@ private:
 	Transform* target;
 
 	float spawnTime = 0.0f;
+
+	Terrain* terrain;
+	AStar* aStar;
 };

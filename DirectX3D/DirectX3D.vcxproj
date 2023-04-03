@@ -213,10 +213,12 @@
     <ClInclude Include="Objects\Character\MinionFirst.h" />
     <ClInclude Include="Objects\Character\MinionSuper.h" />
     <ClInclude Include="Objects\Character\MinionSecond.h" />
+    <ClInclude Include="Objects\Landscape\Building.h" />
     <ClInclude Include="Objects\Landscape\Skybox.h" />
     <ClInclude Include="Objects\Landscape\Terrain.h" />
     <ClInclude Include="Objects\Landscape\TerrainEditor.h" />
     <ClInclude Include="Objects\Landscape\Water.h" />
+    <ClInclude Include="Objects\Manager\BuildingManager.h" />
     <ClInclude Include="Objects\Manager\BulletManager.h" />
     <ClInclude Include="Objects\Manager\EnemyManager.h" />
     <ClInclude Include="Objects\Manager\ParticleManager.h" />
@@ -233,6 +235,8 @@
     <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Objects\Character\Revenant.h" />
+    <ClInclude Include="Objects\UI\BulletUI.h" />
+    <ClInclude Include="Objects\UI\Inventory.h" />
     <ClInclude Include="Objects\UI\ProgressBar.h" />
     <ClInclude Include="Objects\Weapon\Bullet.h" />
     <ClInclude Include="Objects\Weapon\Crowbar.h" />
@@ -249,6 +253,7 @@
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\TerrainEditorScene.h" />
     <ClInclude Include="Scenes\TerrainScene.h" />
+    <ClInclude Include="Scenes\TestScene.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -318,10 +323,12 @@
     <ClCompile Include="Objects\Character\MinionSecond.cpp" />
     <ClCompile Include="Objects\Character\MinionSuper.cpp" />
     <ClCompile Include="Objects\Character\Revenant.cpp" />
+    <ClCompile Include="Objects\Landscape\Building.cpp" />
     <ClCompile Include="Objects\Landscape\Skybox.cpp" />
     <ClCompile Include="Objects\Landscape\Terrain.cpp" />
     <ClCompile Include="Objects\Landscape\TerrainEditor.cpp" />
     <ClCompile Include="Objects\Landscape\Water.cpp" />
+    <ClCompile Include="Objects\Manager\BuildingManager.cpp" />
     <ClCompile Include="Objects\Manager\BulletManager.cpp" />
     <ClCompile Include="Objects\Manager\EnemyManager.cpp" />
     <ClCompile Include="Objects\Manager\ParticleManager.cpp" />
@@ -351,6 +358,7 @@
     <ClCompile Include="Scenes\ParticleToolScene.cpp" />
     <ClCompile Include="Scenes\TerrainEditorScene.cpp" />
     <ClCompile Include="Scenes\TerrainScene.cpp" />
+    <ClCompile Include="Scenes\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />

@@ -27,7 +27,7 @@ void Enemy::Update()
 {
 	if (!transform->Active()) return;
 
-	velocity = target->GlobalPos() - transform->GlobalPos();
+	//velocity = target->GlobalPos() - transform->GlobalPos();
 
 	ExcuteEvent();
 	Move();
@@ -50,8 +50,6 @@ void Enemy::PostRender()
 
 void Enemy::Spawn(Vector3 pos)
 {
-	//if (curState == DYING) return;
-
 	transform->SetActive(true);
 	collider->SetActive(true);
 
@@ -103,25 +101,78 @@ void Enemy::Move()
 	if (curState == HITTED) return;
 	if (curState == DYING) return;
 
-	if (velocity.Length() < chaseRange)
+	destPos = target->GlobalPos();
+
+	if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
+	{
+		SetPath();
+	}
+	else
+	{
+		path.clear();
+		path.push_back(destPos);
+	}
+	
+
+	if (path.empty())
+	{
+		SetState(IDLE);
+		return;
+	}
+
+	
+	Vector3 dest = path.back();
+
+	direction = dest - transform->GlobalPos();
+	direction.y = 0.0f;
+
+	if (direction.Length() < 1.0f)
+		path.pop_back();
+
+	velocity = direction.GetNormalized();
+
+	if (direction.Length() < chaseRange)
 	{
 		SetState(MOVE);
 	}
+	//else
+	//{
+	//	SetState(IDLE);
+	//	return;
+	//}
 
-	transform->Pos() += velocity.GetNormalized() * speed * DELTA;
+	transform->Pos() += velocity * speed * DELTA;
 	transform->Rot().y = atan2(velocity.x, velocity.z);
 }
+
+//void Enemy::Move()
+//{
+//	if (!transform->Active()) return;
+//	if (velocity.Length() < attackRange) return;
+//	if (curState == ATTACK) return;
+//	if (curState == ATTACK1) return;
+//	if (curState == HITTED) return;
+//	if (curState == DYING) return;
+//
+//	if (velocity.Length() < chaseRange)
+//	{
+//		SetState(MOVE);
+//	}
+//
+//	transform->Pos() += velocity.GetNormalized() * speed * DELTA;
+//	transform->Rot().y = atan2(velocity.x, velocity.z);
+//}
 
 void Enemy::Attack()
 {
 	if (!transform->Active()) return;
-	if (velocity.Length() >= attackRange) return;
 	if (curState == ATTACK) return;
 	if (curState == ATTACK1) return;
 	if (curState == HITTED) return;
 	if (curState == DYING) return;
 
-	SetState(ATTACK);
+	if (direction.Length() <= attackRange)
+		SetState(ATTACK);
 }
 
 void Enemy::Dead()
@@ -164,4 +215,39 @@ void Enemy::EndDyingDC()
 void Enemy::EndDyingDT()
 {
 	transform->SetActive(false);
+}
+
+void Enemy::SetPath()
+{
+	int startIndex = aStar->FindCloseNode(transform->GlobalPos());
+	int endIndex = aStar->FindCloseNode(destPos);
+
+	aStar->GetPath(startIndex, endIndex, path);
+	aStar->MakeDirectPath(transform->GlobalPos(), destPos, path);
+
+	UINT pathSize = path.size();
+
+	while (path.size() > 2)
+	{
+		vector<Vector3> tempPath = path;
+		tempPath.erase(tempPath.begin());
+		tempPath.pop_back();
+
+		Vector3 start = path.back();
+		Vector3 end = path.front();
+
+		aStar->MakeDirectPath(start, end, tempPath);
+		path.clear();
+
+		path = tempPath;
+		path.insert(path.begin(), end);
+		path.push_back(start);
+
+		if (pathSize == path.size())
+			break;
+		else
+			pathSize = path.size();
+	}
+
+	path.insert(path.begin(), destPos);
 }

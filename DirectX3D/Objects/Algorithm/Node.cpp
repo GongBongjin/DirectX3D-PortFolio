@@ -4,7 +4,6 @@ Node::Node(Vector3 pos, int index)
     : index(index)
 {
     Pos() = pos;
-    UpdateWorld();
 }
 
 Node::~Node()

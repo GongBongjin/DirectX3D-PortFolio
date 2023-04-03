@@ -42,7 +42,7 @@ private:
     SphereCollider* gunShotPos;
     CapsuleCollider* bodyCollider;
 
-    float moveSpeed = 10.0f;
+    float moveSpeed = 20.0f;
     float rotSpeed = 1.0f;
     float deceleration = 3.0f;
 

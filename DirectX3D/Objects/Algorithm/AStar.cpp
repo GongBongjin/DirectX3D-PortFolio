@@ -16,7 +16,7 @@ AStar::~AStar()
 
 void AStar::Update()
 {
-    if (KEY_DOWN(VK_RBUTTON))
+    if (KEY_DOWN(VK_SPACE))
     {
         Ray ray = CAM->ScreenPointToRay(mousePos);
 
@@ -25,6 +25,7 @@ void AStar::Update()
             if(node->IsRayCollision(ray, nullptr))
             {
                 node->SetState(Node::OBSTACLE);
+                //AddObstacle(nodes.back());
                 break;
             }
         }
@@ -66,6 +67,22 @@ void AStar::SetNode(Terrain* terrain)
 
     SetEdge();
 }
+
+void AStar::SetNode(vector<BoxCollider*> colliders)
+{
+    for (Node* node : nodes)
+    {
+        for(UINT i = 0; i<colliders.size(); i++)
+        {
+            if (node->IsCollision(colliders[i]))
+            {
+                node->SetState(Node::OBSTACLE);
+                //AddObstacle(node);
+            }
+        }
+    }
+}
+
 
 int AStar::FindCloseNode(Vector3 pos)
 {

@@ -4,9 +4,9 @@ TerrainEditor::TerrainEditor()
     : GameObject(L"Landscape/TerrainEditor.hlsl"),
     width(MAX_SIZE), height(MAX_SIZE)
 {
-    material->SetDiffuseMap(L"Textures/Landscape/Dirt2.png");
-    secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
-    thirdMap = Texture::Add(L"Textures/Landscape/Dirt3.png");
+    material->SetDiffuseMap(L"Textures/Landscape/First.jpg");
+    secondMap = Texture::Add(L"Textures/Landscape/Main.png");
+    thirdMap = Texture::Add(L"Textures/Landscape/Road.png");
 
     mesh = new Mesh<VertexType>();
     MakeMesh();

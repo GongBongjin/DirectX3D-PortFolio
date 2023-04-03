@@ -34,6 +34,10 @@ public:
     void SetEvent(int clip, Event event, float timeRatio);
     void ExcuteEvent();
 
+    void SetTerrain(Terrain* terrain) { this->terrain = terrain; }
+    void SetAStar(AStar* aStar) { this->aStar = aStar; }
+    void SetPath();
+
 private:
     void Move();
     void Attack();
@@ -68,13 +72,18 @@ protected:
     float maxHp = 100.0f;
 
     float attackRange = 3.0f;
-    float chaseRange = 100.0f;
+    float chaseRange = 10.0f;
 
-    Vector3 velocity;
     Vector3 barPos;
+    Vector3 velocity;
+    Vector3 direction;
+    Vector3 destPos;
+    vector<Vector3> path;
 
     UINT index;
-
     vector<map<float, Event>> totalEvent;
     vector<map<float, Event>::iterator> eventIters;
+
+    Terrain* terrain;
+    AStar* aStar;
 };

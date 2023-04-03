@@ -3,8 +3,11 @@
 
 MainScene::MainScene()
 {
-	//terrain = new Terrain();
-	//terrain->SetTag("Terrain");
+	terrain = new Terrain();
+	terrain->SetTag("Terrain");
+
+	aStar = new AStar(30,30);
+	aStar->SetNode(terrain);
 
 	revenant = new Revenant();
 	revenant->SetTag("Revenant");
@@ -12,19 +15,23 @@ MainScene::MainScene()
 	revenant->GetTerrain(terrain);
 
 	CAM->SetTarget(revenant);
-	CAM->TargetOptionLoad("test");
+	CAM->TargetOptionLoad("test7");
 	CAM->LookAtTarget();
 
 	BulletManager::Get();
 	EnemyManager::Get();
 	EnemyManager::Get()->SetTarget(revenant);
+	EnemyManager::Get()->GetTerrain(terrain);
+	EnemyManager::Get()->GetAStar(aStar);
 
 	skybox = new Skybox(L"Textures/Landscape/BlueSky.dds");
 }
 
 MainScene::~MainScene()
 {
-	//delete terrain;
+	delete terrain;
+
+	delete aStar;
 
 	delete revenant;
 
@@ -37,7 +44,9 @@ MainScene::~MainScene()
 
 void MainScene::Update()
 {
-	//terrain->UpdateWorld();
+	terrain->UpdateWorld();
+
+	aStar->Update();
 
 	revenant->Update();
 
@@ -53,8 +62,10 @@ void MainScene::PreRender()
 void MainScene::Render()
 {
 	//skybox->Render();
+
+	aStar->Render();
 	
-	//terrain->Render();
+	terrain->Render();
 
 	revenant->Render();
 	

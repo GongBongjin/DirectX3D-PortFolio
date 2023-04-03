@@ -20,6 +20,7 @@ private:
     Skybox* skybox;
 
     Terrain* terrain;
+    AStar* aStar;
 
     Revenant* revenant;
 

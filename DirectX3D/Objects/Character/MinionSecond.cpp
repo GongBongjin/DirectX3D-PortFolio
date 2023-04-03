@@ -10,7 +10,7 @@ MinionSecond::MinionSecond(Transform* transform, ModelAnimatorInstancing* instan
 	collider->Pos() = { 0.0f, 66.0f, 0.0f };
 	collider->Scale() = { 30.0f, 25.0f, 30.0f };
 
-	speed = 6.0f;
+	speed = 9.0f;
 }
 
 MinionSecond::~MinionSecond()

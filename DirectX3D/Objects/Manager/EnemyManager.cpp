@@ -14,7 +14,7 @@ EnemyManager::EnemyManager()
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[0]->Add();
-		transform->Scale() = { 0.02f, 0.02f, 0.02f };
+		transform->Scale() = { 0.1f, 0.1f, 0.1f };
 		//transform->Rot().y = 180.0f;
 		transform->SetActive(false);
 		MinionFirst* first = new MinionFirst(transform, enemyInstancing[0], i);
@@ -31,7 +31,7 @@ EnemyManager::EnemyManager()
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[1]->Add();
-		transform->Scale() = { 0.02f, 0.02f, 0.02f };
+		transform->Scale() = { 0.1f, 0.1f, 0.1f };
 		//transform->Rot().y = 180.0f;
 		transform->SetActive(false);
 		MinionSecond* second = new MinionSecond(transform, enemyInstancing[1], i);
@@ -48,7 +48,7 @@ EnemyManager::EnemyManager()
 	for (int i = 0; i < 1; i++)
 	{
 		Transform* transform = enemyInstancing[2]->Add();
-		transform->Scale() = { 0.02f, 0.02f, 0.02f };
+		transform->Scale() = { 0.1f, 0.1f, 0.1f };
 		//transform->Rot().y = 180.0f;
 		transform->SetActive(false);
 		MinionSuper* super = new MinionSuper(transform, enemyInstancing[2], i);
@@ -155,12 +155,14 @@ void EnemyManager::Spawn()
 	dir.x = Random(-10.0f, 10.0f);
 	dir.z = Random(-10.0f, 10.0f);
 
-	Vector3 randomPos = Vector3::One() + dir.GetNormalized() * 5.0f;
+	Vector3 randomPos = Vector3(terrain->GetSize().x, 0, terrain->GetSize().y) + dir.GetNormalized() * 5.0f;
 
 	for (Enemy* enemy : enemies)
 	{
 		if (!enemy->GetTransform()->Active())
 		{
+			enemy->SetAStar(aStar);
+			enemy->SetTerrain(terrain);
 			enemy->Spawn(randomPos);
 			break;
 		}

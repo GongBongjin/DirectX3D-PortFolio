@@ -10,6 +10,7 @@ public:
     void Render();
 
     void SetNode(class Terrain* terrain);
+    void SetNode(vector<BoxCollider*> colliders);
 
     int FindCloseNode(Vector3 pos);
     int FindRandomPos(Vector3 pos, float range);

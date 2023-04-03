@@ -42,7 +42,7 @@ void BulletManager::GUIRender()
 {
 	for (Bullet* bullet : bullets)
 	{
-		//bullet->GetTransform()->GUIRender();
+		bullet->GetTransform()->GUIRender();
 		bullet->GUIRender();
 	}
 }

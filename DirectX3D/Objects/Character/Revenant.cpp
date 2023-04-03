@@ -14,7 +14,6 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     gunShotPos->SetParent(gun);
     
     ClientToScreen(hWnd, &clientCenterPos);
-    SetCursorPos(clientCenterPos.x, clientCenterPos.y);
     
     crossHair = new Quad(L"Textures/UI/cursor.png");
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
@@ -62,7 +61,7 @@ void Revenant::PostRender()
 
 void Revenant::GUIRender()
 {
-    //Model::GUIRender();
+    Model::GUIRender();
     gun->GUIRender();
 }
 

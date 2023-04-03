@@ -32,8 +32,8 @@ void Model::GUIRender()
 {
     Transform::GUIRender();
 
-    for (Material* material : materials)
-        material->GUIRender();
+    //for (Material* material : materials)
+    //    material->GUIRender();
 }
 
 void Model::SetShader(wstring file)

@@ -120,6 +120,8 @@ using namespace Utility;
 #include "Framework/Math/GameMath.h"
 
 #include "Framework/Render/Texture.h"
+//#include "Framework/Render/Frame.h"
+//#include "Framework/Render/Clip.h"
 #include "Framework/Render/Material.h"
 #include "Framework/Render/Mesh.h"
 #include "Framework/Render/DepthStencil.h"
@@ -160,6 +162,8 @@ using namespace GameMath;
 #include "Objects/Algorithm/AStar.h"
 
 #include "Objects/UI/ProgressBar.h"
+#include "Objects/UI/Inventory.h"
+#include "Objects/UI/BulletUI.h"
 
 #include "Objects/Particle/Particle.h"
 #include "Objects/Particle/Sprite.h"
@@ -173,6 +177,7 @@ using namespace GameMath;
 #include "Objects/Landscape/TerrainEditor.h"
 #include "Objects/Landscape/Skybox.h"
 #include "Objects/Landscape/Water.h"
+#include "Objects/Landscape/Building.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"
@@ -191,6 +196,7 @@ using namespace GameMath;
 
 #include "Objects/Manager/EnemyManager.h"
 #include "Objects/Manager/BulletManager.h"
+#include "Objects/Manager/BuildingManager.h"
 #include "Objects/Manager/ParticleManager.h"
 
 //Scene Header

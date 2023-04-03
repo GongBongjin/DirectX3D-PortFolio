@@ -3,10 +3,11 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-    model = new Model("Boss");
+    model = new Model("Bullet");
     model->Rot().x = XM_PIDIV2;
-    model->GetMesh(0)->SetMaterial(model->AddMaterial("Torso"));
-    model->GetMesh(1)->SetMaterial(model->AddMaterial("Limbs"));
+    //model->GetMesh(0)->SetMaterial(model->AddMaterial("Main"));
+    //model->GetMesh(0)->SetMaterial(model->AddMaterial("Torso"));
+    //model->GetMesh(1)->SetMaterial(model->AddMaterial("Limbs"));
     //model->GetMesh(2)->SetMaterial(model->AddMaterial("Jacket"));
     //model->GetMesh(3)->SetMaterial(model->AddMaterial("Gun"));
     //model->GetMesh(4)->SetMaterial(model->AddMaterial("Darkness"));

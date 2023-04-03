@@ -23,6 +23,6 @@ private:
 
 	Vector3 direction;
 
-	float speed = 50.0f;
+	float speed = 75.0f;
 	float time = 0.0f;
 };
