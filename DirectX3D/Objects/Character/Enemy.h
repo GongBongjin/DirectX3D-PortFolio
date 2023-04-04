@@ -39,6 +39,7 @@ public:
     void SetPath();
 
 private:
+    void test();
     void Move();
     void Attack();
     void Dead();
@@ -71,12 +72,14 @@ protected:
     float curHp = 100.0f;
     float maxHp = 100.0f;
 
-    float attackRange = 3.0f;
-    float chaseRange = 10.0f;
+    float attackRange = 10.0f;
+    float chaseRange = 40.0f;
 
     Vector3 barPos;
-    Vector3 velocity;
-    Vector3 direction;
+
+    Vector3 range;
+
+
     Vector3 destPos;
     vector<Vector3> path;
 

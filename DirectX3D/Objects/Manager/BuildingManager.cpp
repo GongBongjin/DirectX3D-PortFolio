@@ -31,10 +31,10 @@ void BuildingManager::GUIRender()
 
 void BuildingManager::CreateBuilding()
 {
-	buildings.resize(6);
-	colliders.reserve(6);
+	buildings.resize(10);
+	colliders.reserve(10);
 
-	vector<string> s = { {"B0"}, {"B1"}, {"B2"}, {"B3"}, {"B4"}, {"B5"}, {"B6"} };
+	vector<string> s = { {"B0"}, {"B1"}, {"B2"}, {"B3"}, {"B4"}, {"B5"}, {"B6"}, {"B7"}, {"B8"}, {"B9"}};
 
 	int i = 0;
 	

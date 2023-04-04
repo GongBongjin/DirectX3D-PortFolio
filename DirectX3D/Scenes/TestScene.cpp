@@ -13,7 +13,6 @@ TestScene::TestScene()
 	//building = new Building("B0");
 	//building->SetTag("B0");
 	//building->Load();
-
 }
 
 TestScene::~TestScene()

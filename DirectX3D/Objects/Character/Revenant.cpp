@@ -12,6 +12,12 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     gun = new Transform();
     gunShotPos = new SphereCollider();
     gunShotPos->SetParent(gun);
+
+    root = new Transform();
+    bodyCollider = new CapsuleCollider();
+    bodyCollider->SetTag("Revenant_Body");
+    bodyCollider->SetParent(root);
+    bodyCollider->Load();
     
     ClientToScreen(hWnd, &clientCenterPos);
     
@@ -32,26 +38,35 @@ Revenant::~Revenant()
 {
     delete gun;
 
-    delete crossHair;
-
     delete gunShotPos;
+
+    delete root;
+    
+    delete bodyCollider;
+
+    delete crossHair;
 }
 
 void Revenant::Update()
 {
+    IsCollision();
     Control();
     SetAnimation();
 
     gun->SetWorld(GetTransformByNode(75));
+    root->SetWorld(GetTransformByNode(0));
 
     ModelAnimator::Update();
 
     gunShotPos->UpdateWorld();
+    bodyCollider->UpdateWorld();
 }
 
 void Revenant::Render()
 {
     ModelAnimator::Render();
+
+    bodyCollider->Render();
 }
 
 void Revenant::PostRender()
@@ -61,8 +76,9 @@ void Revenant::PostRender()
 
 void Revenant::GUIRender()
 {
-    Model::GUIRender();
-    gun->GUIRender();
+    //Model::GUIRender();
+    //gun->GUIRender();
+    //bodyCollider->GUIRender();
 }
 
 void Revenant::Control()
@@ -177,6 +193,19 @@ void Revenant::Shoot()
         dir = targetPos - gunShotPos->GlobalPos();
 
     BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
+}
+
+void Revenant::IsCollision()
+{
+    for(BoxCollider* buildingCollider : buildingColliders)
+    {
+        if (bodyCollider->IsCollision(buildingCollider))
+        {
+            Vector3 direction = { Pos().x - buildingCollider->Pos().x , 0, Pos().z - buildingCollider->Pos().y };
+            
+            Pos() += direction.GetNormalized();
+        }
+    }
 }
 
 void Revenant::EndShoot()

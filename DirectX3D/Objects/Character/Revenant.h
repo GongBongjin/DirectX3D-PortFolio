@@ -20,6 +20,7 @@ public:
     void GUIRender();
 
     void GetTerrain(Terrain* terrain) { this->terrain = terrain; }
+    void GetBuildingCollider(vector<BoxCollider*> buildingColliders) { this->buildingColliders = buildingColliders; }
 
 private:
     void Control();
@@ -31,6 +32,8 @@ private:
     void SetState(State state);
 
     void Shoot();
+
+    void IsCollision();
 //Event Function
 private:
     void EndShoot();
@@ -55,4 +58,6 @@ private:
 
     Quad* crossHair;
     Terrain* terrain;
+
+    vector<BoxCollider*> buildingColliders;
 };

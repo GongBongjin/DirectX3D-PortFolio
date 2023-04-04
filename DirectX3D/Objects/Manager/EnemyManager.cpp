@@ -105,7 +105,7 @@ void EnemyManager::GUIRender()
 {
 	for (Enemy* enemy : enemies)
 	{
-		//enemy->GetTransform()->GUIRender();
+		enemy->GetTransform()->GUIRender();
 		enemy->GUIRender();
 	}
 }
@@ -152,10 +152,10 @@ void EnemyManager::Collision()
 void EnemyManager::Spawn()
 {
 	Vector3 dir;
-	dir.x = Random(-10.0f, 10.0f);
-	dir.z = Random(-10.0f, 10.0f);
+	dir.x = Random(-20.0f, 20.0f);
+	dir.z = Random(-20.0f, 20.0f);
 
-	Vector3 randomPos = Vector3(terrain->GetSize().x, 0, terrain->GetSize().y) + dir.GetNormalized() * 5.0f;
+	Vector3 randomPos = Vector3(terrain->GetSize().x /2, 0, terrain->GetSize().y/2) + dir * 5.0f;
 
 	for (Enemy* enemy : enemies)
 	{

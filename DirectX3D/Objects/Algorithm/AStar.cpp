@@ -77,7 +77,7 @@ void AStar::SetNode(vector<BoxCollider*> colliders)
             if (node->IsCollision(colliders[i]))
             {
                 node->SetState(Node::OBSTACLE);
-                //AddObstacle(node);
+                AddObstacle(node);
             }
         }
     }

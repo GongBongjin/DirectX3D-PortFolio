@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-    model = new Model("Bullet");
+    model = new Model("B9");
     model->Rot().x = XM_PIDIV2;
     //model->GetMesh(0)->SetMaterial(model->AddMaterial("Main"));
     //model->GetMesh(0)->SetMaterial(model->AddMaterial("Torso"));

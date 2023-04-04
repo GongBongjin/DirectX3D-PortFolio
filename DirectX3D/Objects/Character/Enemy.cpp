@@ -27,9 +27,10 @@ void Enemy::Update()
 {
 	if (!transform->Active()) return;
 
-	//velocity = target->GlobalPos() - transform->GlobalPos();
+	range = target->GlobalPos() - transform->GlobalPos();
 
 	ExcuteEvent();
+	test();
 	Move();
 	Attack();
 	Dead();
@@ -92,16 +93,39 @@ void Enemy::ExcuteEvent()
 	eventIters[index]++;
 }
 
+void Enemy::test()
+{
+	if(range.Length() < chaseRange)
+	{
+		destPos = target->GlobalPos();
+
+		if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
+		{
+			SetPath();
+		}
+		else
+		{
+			path.clear();
+			path.push_back(destPos);
+		}
+	}
+}
+
 void Enemy::Move()
 {
 	if (!transform->Active()) return;
-	if (velocity.Length() < attackRange) return;
+	//if (range.Length() > chaseRange)
+	//{
+	//	SetState(IDLE);
+	//	return;
+	//}
+
 	if (curState == ATTACK) return;
 	if (curState == ATTACK1) return;
 	if (curState == HITTED) return;
 	if (curState == DYING) return;
 
-	destPos = target->GlobalPos();
+	/*destPos = target->GlobalPos();
 
 	if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
 	{
@@ -111,7 +135,7 @@ void Enemy::Move()
 	{
 		path.clear();
 		path.push_back(destPos);
-	}
+	}*/
 	
 
 	if (path.empty())
@@ -123,26 +147,18 @@ void Enemy::Move()
 	
 	Vector3 dest = path.back();
 
-	direction = dest - transform->GlobalPos();
+	Vector3 direction = dest - transform->GlobalPos();
 	direction.y = 0.0f;
 
 	if (direction.Length() < 1.0f)
 		path.pop_back();
 
-	velocity = direction.GetNormalized();
+	SetState(MOVE);
 
-	if (direction.Length() < chaseRange)
-	{
-		SetState(MOVE);
-	}
-	//else
-	//{
-	//	SetState(IDLE);
-	//	return;
-	//}
+	Vector3 velocitiy = direction.GetNormalized();
 
-	transform->Pos() += velocity * speed * DELTA;
-	transform->Rot().y = atan2(velocity.x, velocity.z);
+	transform->Pos() += velocitiy * speed * DELTA;
+	transform->Rot().y = atan2(velocitiy.x, velocitiy.z);
 }
 
 //void Enemy::Move()
@@ -166,13 +182,13 @@ void Enemy::Move()
 void Enemy::Attack()
 {
 	if (!transform->Active()) return;
+	if (range.Length() > attackRange) return;
 	if (curState == ATTACK) return;
 	if (curState == ATTACK1) return;
 	if (curState == HITTED) return;
 	if (curState == DYING) return;
 
-	if (direction.Length() <= attackRange)
-		SetState(ATTACK);
+	SetState(ATTACK);
 }
 
 void Enemy::Dead()

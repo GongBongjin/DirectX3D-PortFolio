@@ -8,7 +8,7 @@ Terrain::Terrain()
     //material->SetNormalMap(L"Textures/Landscape/GrassUV01_N.png");
       
     heightMap = Texture::Add(L"Textures/HeightMaps/MainHeightMap.png");
-    alphaMap = Texture::Add(L"Textures/AlphaMaps/AlphaMain.png");
+    alphaMap = Texture::Add(L"Textures/AlphaMaps/AlphaMain2.png");
     secondMap = Texture::Add(L"Textures/Landscape/Main.png");
     thirdMap = Texture::Add(L"Textures/Landscape/Road.png");
 
