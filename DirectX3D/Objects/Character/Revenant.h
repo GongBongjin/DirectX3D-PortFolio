@@ -7,6 +7,7 @@ private:
     {
         IDLE,
         ATTACK,
+        RELOAD,
         MOVE_FORWARD
     }curState = IDLE;
 
@@ -27,6 +28,8 @@ private:
     void Move();
     void Rotate();
     void Attack();
+    void Reload();
+
     void SetAnimation();
 
     void SetState(State state);
@@ -36,7 +39,7 @@ private:
     void IsCollision();
 //Event Function
 private:
-    void EndShoot();
+    void SetIdle();
 
 
 private:
@@ -44,10 +47,13 @@ private:
     Transform* gun;
     SphereCollider* gunShotPos;
     CapsuleCollider* bodyCollider;
+    PlayerUI* playerUI;
 
     float moveSpeed = 20.0f;
     float rotSpeed = 1.0f;
     float deceleration = 3.0f;
+    UINT shootCount = 0;
+    const UINT maxShootCount = 4;
 
     Vector3 velocity;
     Vector3 targetPos;

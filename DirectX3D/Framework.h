@@ -163,7 +163,7 @@ using namespace GameMath;
 
 #include "Objects/UI/ProgressBar.h"
 #include "Objects/UI/Inventory.h"
-#include "Objects/UI/BulletUI.h"
+#include "Objects/UI/PlayerUI.h"
 
 #include "Objects/Particle/Particle.h"
 #include "Objects/Particle/Sprite.h"

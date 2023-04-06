@@ -94,13 +94,13 @@ void MainScene::GUIRender()
 {
 	//terrain->GUIRender();
 
-	BuildingManager::Get()->GUIRender();
+	//BuildingManager::Get()->GUIRender();
 
 	revenant->GUIRender();
 
 	//BulletManager::Get()->GUIRender();
 
-	EnemyManager::Get()->GUIRender();
+	//EnemyManager::Get()->GUIRender();
 }
 
 void MainScene::Start()

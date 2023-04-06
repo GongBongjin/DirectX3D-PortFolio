@@ -48,7 +48,7 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal)
     index[2] = width * z + x + 1;
     index[3] = width * (z + 1) + x + 1;
 
-    vector<VertexType> vertices = mesh->GetVertices();
+    vector<VertexType>& vertices = mesh->GetVertices();
 
     Vector3 p[4];
     for (UINT i = 0; i < 4; i++)

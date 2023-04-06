@@ -24,14 +24,19 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     crossHair = new Quad(L"Textures/UI/cursor.png");
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
     crossHair->UpdateWorld();
+    playerUI = new PlayerUI();
+    
 
     ReadClip("Idle");
-    ReadClip("Attack");
+    ReadClip("Attack"); 
+    ReadClip("Reload");
     ReadClip("MoveForward");
+
 
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.0f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.75f);
-    GetClip(ATTACK)->SetEvent(bind(&Revenant::EndShoot, this), 1.0f);
+    GetClip(ATTACK)->SetEvent(bind(&Revenant::SetIdle, this), 1.0f);
+    GetClip(RELOAD)->SetEvent(bind(&Revenant::SetIdle, this), 0.70f);
 }
 
 Revenant::~Revenant()
@@ -45,6 +50,7 @@ Revenant::~Revenant()
     delete bodyCollider;
 
     delete crossHair;
+    delete playerUI;
 }
 
 void Revenant::Update()
@@ -60,6 +66,8 @@ void Revenant::Update()
 
     gunShotPos->UpdateWorld();
     bodyCollider->UpdateWorld();
+
+    playerUI->Update();
 }
 
 void Revenant::Render()
@@ -72,30 +80,34 @@ void Revenant::Render()
 void Revenant::PostRender()
 {
     crossHair->Render();
+
+    playerUI->PostRender();
 }
 
 void Revenant::GUIRender()
 {
-    //Model::GUIRender();
+    Model::GUIRender();
     //gun->GUIRender();
     //bodyCollider->GUIRender();
+    playerUI->GUIRender();
 }
 
 void Revenant::Control()
 {
-    Rotate();
+    //Rotate();
     Move();
     Attack();
+    Reload();
 }
 
 void Revenant::Move()
 {
-    if (curState == ATTACK)
-    {
-        velocity.x = 0;
-        velocity.z = 0;
-        return;
-    }
+    //if (curState == ATTACK)
+    //{
+    //    velocity.x = 0;
+    //    velocity.z = 0;
+    //    return;
+    //}
 
     bool isMoveZ = false;
     bool isMoveX = false;
@@ -150,9 +162,17 @@ void Revenant::Rotate()
 void Revenant::Attack()
 {
     if (curState == ATTACK) return;
+    if (curState == RELOAD) return;
 
     if (KEY_DOWN(VK_LBUTTON))
     {
+        if (shootCount >= maxShootCount)
+        {
+            SetState(RELOAD);
+            shootCount = 0;
+            return;
+        }
+
         SetState(ATTACK);
 
         Ray ray = CAM->ScreenPointToRay(mousePos);
@@ -161,9 +181,19 @@ void Revenant::Attack()
     }
 }
 
+void Revenant::Reload()
+{
+    if (KEY_DOWN(VK_RBUTTON))
+    {
+        SetState(RELOAD);
+        shootCount = 0;
+    }
+}
+
 void Revenant::SetAnimation()
 {
     if (curState == ATTACK) return;
+    if (curState == RELOAD) return;
 
     if (velocity.z > 0.1f)
         SetState(MOVE_FORWARD);
@@ -192,7 +222,12 @@ void Revenant::Shoot()
     if (isTarget)
         dir = targetPos - gunShotPos->GlobalPos();
 
-    BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
+    shootCount++;
+
+    if(shootCount < maxShootCount)
+    {
+        BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
+    }
 }
 
 void Revenant::IsCollision()
@@ -201,14 +236,14 @@ void Revenant::IsCollision()
     {
         if (bodyCollider->IsCollision(buildingCollider))
         {
-            Vector3 direction = { Pos().x - buildingCollider->Pos().x , 0, Pos().z - buildingCollider->Pos().y };
+            Vector3 direction = Pos() - buildingCollider->GlobalPos();
             
             Pos() += direction.GetNormalized();
         }
     }
 }
 
-void Revenant::EndShoot()
+void Revenant::SetIdle()
 {
     SetState(IDLE);
 }
