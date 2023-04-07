@@ -49,11 +49,14 @@ private:
     CapsuleCollider* bodyCollider;
     PlayerUI* playerUI;
 
+    float curHp;
+    float maxHp = 100.0f;
     float moveSpeed = 20.0f;
     float rotSpeed = 1.0f;
     float deceleration = 3.0f;
     UINT shootCount = 0;
     const UINT maxShootCount = 4;
+    UINT gold= 500;
 
     Vector3 velocity;
     Vector3 targetPos;
@@ -66,4 +69,6 @@ private:
     Terrain* terrain;
 
     vector<BoxCollider*> buildingColliders;
+
+    bool testUI;
 };

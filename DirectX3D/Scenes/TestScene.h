@@ -14,7 +14,6 @@ public:
 	virtual void GUIRender() override;
 
 private:
-	//Building* building;
-	Terrain* terrain;
-	AStar* aStar;
+	Revenant* revenant;
+	Inventory* inventory;
 };

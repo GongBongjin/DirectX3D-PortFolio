@@ -18,7 +18,7 @@ MainScene::MainScene()
 	revenant->GetTerrain(terrain);
 	
 	CAM->SetTarget(revenant);
-	CAM->TargetOptionLoad("test7");
+	CAM->TargetOptionLoad("test8");
 	CAM->LookAtTarget();
 
 	BulletManager::Get();

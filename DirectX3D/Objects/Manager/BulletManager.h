@@ -3,7 +3,7 @@
 class BulletManager : public Singleton<BulletManager>
 {
 private:
-	const UINT SIZE = 4;
+	const UINT SIZE = 8;
 
 public:
 	BulletManager();

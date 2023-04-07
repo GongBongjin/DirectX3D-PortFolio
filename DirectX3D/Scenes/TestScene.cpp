@@ -3,32 +3,25 @@
 
 TestScene::TestScene()
 {
-	terrain = new Terrain();
-	aStar = new AStar(40,40);
-	aStar->SetNode(terrain);
+	revenant = new Revenant();
+	revenant->SetTag("Revenant");
+	revenant->Load();
 
-	BuildingManager::Get();
-	aStar->SetNode(BuildingManager::Get()->GetColliders());
-
-	//building = new Building("B0");
-	//building->SetTag("B0");
-	//building->Load();
+	CAM->SetTarget(revenant);
+	CAM->TargetOptionLoad("test8");
+	CAM->LookAtTarget();
 }
 
 TestScene::~TestScene()
 {
-	delete terrain;
-	delete aStar;
-	BuildingManager::Delete();
-	//delete building;
+	delete revenant;
+
 }
 
 void TestScene::Update()
 {
-	aStar->Update();
+	revenant->Update();
 
-	BuildingManager::Get()->Update();
-	//building->Update();
 }
 
 void TestScene::PreRender()
@@ -37,18 +30,17 @@ void TestScene::PreRender()
 
 void TestScene::Render()
 {
-	terrain->Render();
-	aStar->Render();
-	BuildingManager::Get()->Render();
-	//building->Render();
+	revenant->Render();
 }
 
 void TestScene::PostRender()
 {
+	revenant-> PostRender();
+
 }
 
 void TestScene::GUIRender()
 {
-	BuildingManager::Get()->GUIRender();
-	//building->GUIRender();
+	revenant->GUIRender();
+
 }

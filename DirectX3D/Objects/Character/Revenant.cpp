@@ -9,6 +9,8 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     GetMesh(4)->SetMaterial(AddMaterial("Darkness"));
     GetMesh(7)->SetMaterial(AddMaterial("Weapon"));
 
+    curHp = 40.0f;
+
     gun = new Transform();
     gunShotPos = new SphereCollider();
     gunShotPos->SetParent(gun);
@@ -19,6 +21,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     bodyCollider->SetParent(root);
     bodyCollider->Load();
     
+    testUI = false;
     ClientToScreen(hWnd, &clientCenterPos);
     
     crossHair = new Quad(L"Textures/UI/cursor.png");
@@ -55,6 +58,9 @@ Revenant::~Revenant()
 
 void Revenant::Update()
 {
+    if (KEY_DOWN(VK_ESCAPE))
+        testUI = !testUI;
+    
     IsCollision();
     Control();
     SetAnimation();
@@ -67,6 +73,7 @@ void Revenant::Update()
     gunShotPos->UpdateWorld();
     bodyCollider->UpdateWorld();
 
+    playerUI->GetPlayerInfo(curHp, maxHp, gold);
     playerUI->Update();
 }
 
@@ -94,7 +101,7 @@ void Revenant::GUIRender()
 
 void Revenant::Control()
 {
-    //Rotate();
+    Rotate();
     Move();
     Attack();
     Reload();
@@ -152,8 +159,18 @@ void Revenant::Move()
 
 void Revenant::Rotate()
 {
-    Vector3 delta = mousePos - Vector3(CENTER_X, CENTER_Y);
-    SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+    Vector3 delta;
+    //다시 정상적인 상태로 돌아왔을때 마우스위치변화에 따른 로테이션값 변화를 적용해야함.
+
+    if (testUI)
+    {
+        delta = mousePos - Vector3(CENTER_X, CENTER_Y);
+        SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+    }
+    else
+    {
+        delta = Vector3::Zero();
+    }
 
     Rot().y += delta.x * rotSpeed * DELTA;
     CAM->Rot().x -= delta.y * rotSpeed * DELTA;
@@ -161,6 +178,7 @@ void Revenant::Rotate()
 
 void Revenant::Attack()
 {
+    if (!testUI) return;
     if (curState == ATTACK) return;
     if (curState == RELOAD) return;
 
@@ -224,7 +242,7 @@ void Revenant::Shoot()
 
     shootCount++;
 
-    if(shootCount < maxShootCount)
+    if(shootCount <= maxShootCount)
     {
         BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
     }

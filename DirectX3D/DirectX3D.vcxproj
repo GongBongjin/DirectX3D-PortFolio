@@ -344,6 +344,7 @@
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
+    <ClCompile Include="Objects\UI\Inventory.cpp" />
     <ClCompile Include="Objects\UI\PlayerUI.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
     <ClCompile Include="Objects\Weapon\Bullet.cpp" />

@@ -23,9 +23,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new ModelRenderScene());
     //SceneManager::Get()->Create("Start", new ModelAnimationScene());
     //SceneManager::Get()->Create("Start", new TerrainEditorScene());
-    SceneManager::Get()->Create("Start", new MainScene());
-    //SceneManager::Get()->Create("Start", new BossScene());
-    //SceneManager::Get()->Create("Start", new TestScene());
+    //SceneManager::Get()->Create("Start", new MainScene());
+    SceneManager::Get()->Create("Start", new TestScene());
 
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
