@@ -129,6 +129,7 @@ using namespace Utility;
 #include "Framework/Render/GBuffer.h"
 
 #include "Framework/Collision/Collider.h"
+//#include "Framework/Collision/RectCollider.h"
 #include "Framework/Collision/BoxCollider.h"
 #include "Framework/Collision/SphereCollider.h"
 #include "Framework/Collision/CapsuleCollider.h"
@@ -161,6 +162,7 @@ using namespace GameMath;
 #include "Objects/Algorithm/Heap.h"
 #include "Objects/Algorithm/AStar.h"
 
+//#include "Objects/UI/Button.h"
 #include "Objects/UI/ProgressBar.h"
 #include "Objects/UI/Inventory.h"
 #include "Objects/UI/PlayerUI.h"

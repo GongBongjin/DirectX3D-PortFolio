@@ -7,6 +7,7 @@ public:
 	~Inventory();
 
 	void Update();
+	void PreRender();
 	void PostRender();
 	void GUIRender();
 
@@ -17,11 +18,12 @@ private:
 	bool isOn = false;
 
 	Quad* quad;
-	Quad* abilityQuad;
-	Quad* invenQuad;
-	vector<Quad*> rooms;
+	Quad* xQuad;
+	vector<Quad*> itemIcons;
 
-	vector<UINT> fontdata;
+	RenderTarget* renderTarget;
+	DepthStencil* depthStencil;
+	Quad* depQuad;
 
 	float maxHp;
 	UINT gold;

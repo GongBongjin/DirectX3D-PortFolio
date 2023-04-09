@@ -6,37 +6,42 @@ Inventory::Inventory()
 	quad->SetTag("BasiceQuad");
 	quad->Load();
 
-	abilityQuad = new Quad(L"Textures/UI/ability.png");
-	abilityQuad->SetTag("ability_Quad");
-	abilityQuad->Load();
+	xQuad = new Quad(L"Textures/UI/Cancel.png");
+	xQuad->SetTag("X");
+	xQuad->Load();
 
-	invenQuad = new Quad(L"Textures/UI/inven.png");
-	invenQuad->SetTag("inven_Quad");
-	invenQuad->Load();
-
-	rooms.resize(5);
-	int i = 0;
-	for (Quad*& room : rooms)
-	{
-		room = new Quad(L"Textures/UI/roomFrame.png");
-		room->SetTag("room"+ to_string(i));
-		room->Pos() = { (float)1094 - (i * 38), 197.0f, 0.0f };
-		room->Scale() = { 0.7f, 0.7f, 0 };
-
-		i++;
-	}
+	renderTarget = new RenderTarget();
+	depthStencil = new DepthStencil();
+	depQuad = new Quad(L"Textures/UI/RenderTargetQuad.png");
+	depQuad->GetMaterial()->SetShader(L"Effect/Bloom.hlsl");
+	depQuad->GetMaterial()->SetDiffuseMap(Texture::Add(L"Test", renderTarget->GetSRV()));
+	depQuad->SetTag("depQuad");
+	depQuad->Load();
 	
-	i = 0;
+
+	vector<wstring> iconName = { {L"hp.png"}, {L"mp.png"}, {L"bow.png"}, {L"helmets.png"} };
+	itemIcons.resize(iconName.size());
+	for (UINT i = 0; i < itemIcons.size(); i++)
+	{
+		itemIcons[i] = new Quad(L"Textures/UI/" + iconName[i]);
+		itemIcons[i]->SetTag("icon" + to_string(i));
+		itemIcons[i]->Load();
+	}
 }
 
 Inventory::~Inventory()
 {
 	delete quad;
-	delete abilityQuad;
-	delete invenQuad;
 
-	for (Quad* room : rooms)
-		delete room;
+	delete xQuad;
+
+	for (Quad* itemIcon : itemIcons)
+		delete itemIcon;
+
+	delete renderTarget;
+	delete depthStencil;
+
+	delete depQuad;
 }
 
 void Inventory::Update()
@@ -44,12 +49,16 @@ void Inventory::Update()
 	if (KEY_DOWN('I'))
 		isOn = !isOn;
 
-	quad->UpdateWorld();
-	abilityQuad->UpdateWorld();
-	invenQuad->UpdateWorld();
+	IsClick();
 
-	for (Quad* room : rooms)
-		room->UpdateWorld();
+	quad->UpdateWorld();
+
+	depQuad->UpdateWorld();
+
+	xQuad->UpdateWorld();
+
+	for (Quad* itemIcon : itemIcons)
+		itemIcon->UpdateWorld();
 }
 
 void Inventory::PostRender()
@@ -58,26 +67,29 @@ void Inventory::PostRender()
 
 	quad->Render();
 
-	abilityQuad->Render();
+	depQuad->Render();
 
-	invenQuad->Render();
+	xQuad->Render();
 
-	for (Quad* room : rooms)
-		room->Render();
+
+	for (Quad* itemIcon : itemIcons)
+		itemIcon->Render();
 
 	FontSet();
+
+	//renderTarget->Set(depthStencil);
 }
 
 void Inventory::GUIRender()
 {
 	quad->GUIRender();
-	
-	abilityQuad->GUIRender();
 
-	invenQuad->GUIRender();
+	depQuad->GUIRender();
 
-	for (Quad* room : rooms)
-		room->GUIRender();
+	xQuad->GUIRender();
+
+	for (Quad* itemIcon : itemIcons)
+		itemIcon->GUIRender();
 }
 
 void Inventory::GetPlayerInfo(float maxHp, UINT gold)
@@ -103,5 +115,5 @@ void Inventory::FontSet()
 	//Font::Get()->RenderText("마나 재생", { CENTER_X, 150.0f });
 	//Font::Get()->RenderText("이동 속도", { CENTER_X, 150.0f });
 
-	Font::Get()->RenderText(to_string(gold), { 880.0f, 201.0f });
+	Font::Get()->RenderText(to_string(gold), { 1030.0f, 215.0f });
 }

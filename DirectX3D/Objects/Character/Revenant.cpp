@@ -27,6 +27,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     crossHair = new Quad(L"Textures/UI/cursor.png");
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
     crossHair->UpdateWorld();
+
     playerUI = new PlayerUI();
     
 

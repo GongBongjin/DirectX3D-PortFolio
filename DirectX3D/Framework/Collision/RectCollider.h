@@ -1,6 +1,6 @@
 #pragma once
 
-class RectCollider : public Collider
+class RectCollider : public GameObject
 {
 public:
     struct ObbDesc
@@ -12,17 +12,15 @@ public:
 
 public:
     RectCollider(Vector2 size);
-    ~RectCollider() = default;
+    ~RectCollider();
 
-    virtual bool IsPointCollision(Vector2 point) override;
-    virtual bool IsRectCollision(RectCollider* rect, Vector2* overlap) override;
-    virtual bool IsCircleCollision(CircleCollider* circle) override;
+    bool IsPointCollision(Vector2 point);
 
-    virtual bool PushCollider(Collider* collider) override;
+    bool PushCollider(Collider* collider);
 
     Direction GetDirection(Collider* collider);
 
-    Vector2 Size() { return size * GlobalScale(); }
+    Vector2 Size() { return size * Vector2(GlobalScale().x, GlobalScale().y); }
     Vector2 Half() { return Size() * 0.5f; }
 
     Vector2 LeftTop();
@@ -46,6 +44,7 @@ private:
 private:
     Vector2 size;
 
-    ObbDesc obbDesc;       
-    
+    ObbDesc obbDesc;
+
+    vector<Vertex>* mesh;
 };

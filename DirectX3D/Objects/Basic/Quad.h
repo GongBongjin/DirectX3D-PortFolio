@@ -13,6 +13,8 @@ public:
     void Render();
     void SetRender();
 
+    Vector2 GetSize() { return size; }
+
 private:
     void MakeMesh();
 

@@ -95,7 +95,8 @@ void GameManager::Create()
     Audio::Get();
     
     Font::Get()->AddColor("White", 1, 1, 1);
-    Font::Get()->AddStyle("Default", L"배달의민족 주아");
+    //Font::Get()->AddStyle("Default", L"배달의민족 주아");
+    Font::Get()->AddStyle("Default", L"Beyond The Mountains");
     
     Font::Get()->SetColor("White");
     Font::Get()->SetStyle("Default");

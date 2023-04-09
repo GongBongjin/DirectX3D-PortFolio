@@ -1,11 +1,13 @@
 #include "Framework.h"
 
 RectCollider::RectCollider(Vector2 size)
-    : size(size)
+    : size(size), GameObject(L"Basic/Collider.hlsl")
 {
-    type = Type::RECT;
-
     Vector2 halfSize = size * 0.5f;
+
+    mesh = new Mesh<Vertex>();
+
+    vector<Vertex>& vertices = mesh->
 
     vertices.emplace_back(-halfSize.x, +halfSize.y);
     vertices.emplace_back(+halfSize.x, +halfSize.y);
@@ -13,8 +15,8 @@ RectCollider::RectCollider(Vector2 size)
     vertices.emplace_back(-halfSize.x, -halfSize.y);
     vertices.emplace_back(-halfSize.x, +halfSize.y);
 
-    vertexBuffer = new VertexBuffer(vertices.data(),
-        sizeof(VertexPos), vertices.size());
+    mesh->CreateMesh();
+
 }
 
 bool RectCollider::IsPointCollision(Vector2 point)
@@ -28,50 +30,22 @@ bool RectCollider::IsPointCollision(Vector2 point)
     return abs(point.x) < half.x && abs(point.y) < half.y;
 }
 
-/*
-bool RectCollider::IsPointCollision(Vector2 point)
-{
-    ObbDesc obb = GetObb();
 
-    Vector2 direction = obb.position - point;
-
-    float d = abs(Dot(direction, obb.axis[0]));
-
-    if (d > obb.halfSize.x) return false;
-
-    d = abs(Dot(direction, obb.axis[1]));
-
-    if (d > obb.halfSize.y) return false;
-
-    return true;
-}
-*/
-bool RectCollider::IsRectCollision(RectCollider* rect, Vector2* overlap)
-{
-    if (overlap)
-        return IsAABB(rect, overlap);
-    
-    return IsOBB(rect);
-}
-
-bool RectCollider::IsCircleCollision(CircleCollider* circle)
-{
-    ObbDesc obb = GetObb();
-
-    Vector2 direction = obb.position - circle->GlobalPos();
-
-    float x = abs(Dot(direction, obb.axis[0]));
-    float y = abs(Dot(direction, obb.axis[1]));
-
-    if (x > obb.halfSize.x + circle->Radius()) return false;
-    if (y > obb.halfSize.y+ circle->Radius()) return false;
-
-    if (x < obb.halfSize.x) return true;
-    if (y < obb.halfSize.y) return true;
-
-    Vector2 temp = Vector2(x, y) - obb.halfSize;
-
-    return circle->Radius() > temp.Length();
+//bool RectCollider::IsPointCollision(Vector2 point)
+//{
+//    ObbDesc obb = GetObb();
+//
+//    Vector2 direction = obb.position - point;
+//
+//    float d = abs(Dot(direction, obb.axis[0]));
+//
+//    if (d > obb.halfSize.x) return false;
+//
+//    d = abs(Dot(direction, obb.axis[1]));
+//
+//    if (d > obb.halfSize.y) return false;
+//
+//    return true;
 }
 
 Vector2 RectCollider::LeftTop()
@@ -143,6 +117,11 @@ RectCollider::ObbDesc RectCollider::GetObb()
     obbDesc.axis[1] = Up();
 
     return obbDesc;
+}
+
+void RectCollider::MakeMesh()
+{
+
 }
 
 bool RectCollider::IsAABB(RectCollider* rect, Vector2* overlap)

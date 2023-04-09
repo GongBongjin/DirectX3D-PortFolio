@@ -7,6 +7,7 @@ public:
 	~PlayerUI();
 
 	void Update();
+	void PreRender();
 	void PostRender();
 	void GUIRender();
 
