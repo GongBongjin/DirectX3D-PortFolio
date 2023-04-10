@@ -2,46 +2,57 @@
 
 Inventory::Inventory()
 {
-	quad = new Quad(L"Textures/UI/BasicQuad.png");
-	quad->SetTag("BasiceQuad");
-	quad->Load();
+	inventoryPanel = new Quad(L"Textures/UI/BasicQuad.png");
+	inventoryPanel->SetTag("BasiceQuad");
+	inventoryPanel->Load();
 
-	xQuad = new Quad(L"Textures/UI/Cancel.png");
-	xQuad->SetTag("X");
-	xQuad->Load();
-
-	renderTarget = new RenderTarget();
-	depthStencil = new DepthStencil();
-	depQuad = new Quad(L"Textures/UI/RenderTargetQuad.png");
-	depQuad->GetMaterial()->SetShader(L"Effect/Bloom.hlsl");
-	depQuad->GetMaterial()->SetDiffuseMap(Texture::Add(L"Test", renderTarget->GetSRV()));
-	depQuad->SetTag("depQuad");
-	depQuad->Load();
-	
+	xButton = new Button(L"Textures/UI/Cancel.png");
+	xButton->SetTag("X");
+	xButton->Load();
+	xButton->SetEvent(bind(&Inventory::CloseInven, this));
 
 	vector<wstring> iconName = { {L"hp.png"}, {L"mp.png"}, {L"bow.png"}, {L"helmets.png"} };
 	itemIcons.resize(iconName.size());
 	for (UINT i = 0; i < itemIcons.size(); i++)
 	{
-		itemIcons[i] = new Quad(L"Textures/UI/" + iconName[i]);
+		itemIcons[i] = new Button(L"Textures/UI/" + iconName[i]);
 		itemIcons[i]->SetTag("icon" + to_string(i));
+		itemIcons[i]->SetParamEvent(bind(&Inventory::OnSelectItem, this, itemIcons[i]));
 		itemIcons[i]->Load();
 	}
+
+	//invenIcons.resize(6);
+	//for (UINT i = 0; i < invenIcons.size(); i++)
+	//{
+	//	invenIcons[i] = new Button(Vector2{5.0f, 5.0f});
+	//	invenIcons[i]->SetTag("inven" + to_string(i));
+	//}
+
+	renderTarget = new RenderTarget();
+	depthStencil = new DepthStencil();
+	characterViewQuad = new Quad(L"Textures/UI/RenderTargetQuad.png");
+	characterViewQuad->GetMaterial()->SetShader(L"Effect/Bloom.hlsl");
+	characterViewQuad->GetMaterial()->SetDiffuseMap(Texture::Add(L"Test", renderTarget->GetSRV()));
+	characterViewQuad->SetTag("characterViewQuad");
+	characterViewQuad->Load();
 }
 
 Inventory::~Inventory()
 {
-	delete quad;
+	delete inventoryPanel;
 
-	delete xQuad;
+	delete xButton;
 
-	for (Quad* itemIcon : itemIcons)
+	for (Button* itemIcon : itemIcons)
 		delete itemIcon;
+
+	for (Button* invenIcon : invenIcons)
+		delete invenIcon;
 
 	delete renderTarget;
 	delete depthStencil;
 
-	delete depQuad;
+	delete characterViewQuad;
 }
 
 void Inventory::Update()
@@ -49,47 +60,67 @@ void Inventory::Update()
 	if (KEY_DOWN('I'))
 		isOn = !isOn;
 
-	IsClick();
+	inventoryPanel->UpdateWorld();
 
-	quad->UpdateWorld();
+	characterViewQuad->UpdateWorld();
 
-	depQuad->UpdateWorld();
+	xButton->Update();
 
-	xQuad->UpdateWorld();
+	for (Button* itemIcon : itemIcons)
+		itemIcon->Update();
 
-	for (Quad* itemIcon : itemIcons)
-		itemIcon->UpdateWorld();
+	if (!invenIcons.empty()) return;
+	{
+		for (Button* invenIcon : invenIcons)
+			invenIcon->Update();
+	}
+}
+
+void Inventory::PreRender()
+{
 }
 
 void Inventory::PostRender()
 {
 	if (!isOn) return;
 
-	quad->Render();
-
-	depQuad->Render();
-
-	xQuad->Render();
-
-
-	for (Quad* itemIcon : itemIcons)
-		itemIcon->Render();
-
-	FontSet();
+	inventoryPanel->Render();
 
 	//renderTarget->Set(depthStencil);
+	//characterViewQuad->Render();
+
+	xButton->Render();
+
+	for (Button* itemIcon : itemIcons)
+		itemIcon->Render();
+
+	if(!invenIcons.empty())
+	{
+		for (Button* invenIcon : invenIcons)
+		{
+			invenIcon->Render();
+		}
+	}
+
+	FontSet();
 }
 
 void Inventory::GUIRender()
 {
-	quad->GUIRender();
+	inventoryPanel->GUIRender();
 
-	depQuad->GUIRender();
+	characterViewQuad->GUIRender();
 
-	xQuad->GUIRender();
+	xButton->GUIRender();
 
-	for (Quad* itemIcon : itemIcons)
+	for (Button* itemIcon : itemIcons)
 		itemIcon->GUIRender();
+
+	if (!invenIcons.empty())
+	{
+		for (Button* invenIcon : invenIcons)
+			invenIcon->GUIRender();
+	}
 }
 
 void Inventory::GetPlayerInfo(float maxHp, UINT gold)
@@ -100,8 +131,6 @@ void Inventory::GetPlayerInfo(float maxHp, UINT gold)
 
 void Inventory::FontSet()
 {
-	Float2 pos;
-
 	//Font::Get()->RenderText("Attack", { 250.0f, 600.0f });
 	//Font::Get()->RenderText("물리 공격력", { 320.0f, 570.0f });
 	//Font::Get()->RenderText("마법 공격력", { 320.0f, 550.0f });
@@ -116,4 +145,28 @@ void Inventory::FontSet()
 	//Font::Get()->RenderText("이동 속도", { CENTER_X, 150.0f });
 
 	Font::Get()->RenderText(to_string(gold), { 1030.0f, 215.0f });
+}
+
+void Inventory::CloseInven()
+{
+	isOn = !isOn;
+}
+
+void Inventory::OnSelectItem(Button* button)
+{
+	//if(invenIcons.size() == 1)
+	{
+		Button* storeB = new Button(button->GetFileName());
+		storeB->Pos() = {900.0f, 450.0f, 0.0f};
+		storeB->UpdateWorld();
+		storeB->GetCollider()->UpdateWorld();
+
+		for (pair<UINT, vector<Button*>> item : inven)
+		{
+
+		}
+
+		
+		//invenIcons.push_back(storeB);
+	}
 }

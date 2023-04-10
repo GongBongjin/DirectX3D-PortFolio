@@ -21,7 +21,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     bodyCollider->SetParent(root);
     bodyCollider->Load();
     
-    testUI = false;
+    testUI = true;
     ClientToScreen(hWnd, &clientCenterPos);
     
     crossHair = new Quad(L"Textures/UI/cursor.png");
@@ -30,12 +30,10 @@ Revenant::Revenant() : ModelAnimator("Revenant")
 
     playerUI = new PlayerUI();
     
-
     ReadClip("Idle");
     ReadClip("Attack"); 
     ReadClip("Reload");
     ReadClip("MoveForward");
-
 
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.0f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.75f);
@@ -59,7 +57,7 @@ Revenant::~Revenant()
 
 void Revenant::Update()
 {
-    if (KEY_DOWN(VK_ESCAPE))
+    if (KEY_DOWN('I'))
         testUI = !testUI;
     
     IsCollision();

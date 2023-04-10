@@ -31,6 +31,8 @@ bool Collider::IsCollision(Collider* collider)
 
     switch (collider->type)
     {
+    //case Collider::Type::RECT:
+    //    return IsPoint
     case Collider::Type::BOX:
         return IsBoxCollision((BoxCollider*)collider);
     case Collider::Type::SPHERE:

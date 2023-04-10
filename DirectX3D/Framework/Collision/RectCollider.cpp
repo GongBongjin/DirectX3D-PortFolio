@@ -1,22 +1,11 @@
 #include "Framework.h"
 
 RectCollider::RectCollider(Vector2 size)
-    : size(size), GameObject(L"Basic/Collider.hlsl")
+    : size(size)
 {
-    Vector2 halfSize = size * 0.5f;
+    halfSize = size * 0.5f;
 
-    mesh = new Mesh<Vertex>();
-
-    vector<Vertex>& vertices = mesh->
-
-    vertices.emplace_back(-halfSize.x, +halfSize.y);
-    vertices.emplace_back(+halfSize.x, +halfSize.y);
-    vertices.emplace_back(+halfSize.x, -halfSize.y);
-    vertices.emplace_back(-halfSize.x, -halfSize.y);
-    vertices.emplace_back(-halfSize.x, +halfSize.y);
-
-    mesh->CreateMesh();
-
+    MakeMesh();
 }
 
 bool RectCollider::IsPointCollision(Vector2 point)
@@ -46,7 +35,7 @@ bool RectCollider::IsPointCollision(Vector2 point)
 //    if (d > obb.halfSize.y) return false;
 //
 //    return true;
-}
+//}
 
 Vector2 RectCollider::LeftTop()
 {
@@ -108,129 +97,140 @@ float RectCollider::B()
     return min(minTop, minBottom);
 }
 
-RectCollider::ObbDesc RectCollider::GetObb()
-{
-    obbDesc.position = GlobalPos();
-    obbDesc.halfSize = Half();
-
-    obbDesc.axis[0] = Right();
-    obbDesc.axis[1] = Up();
-
-    return obbDesc;
-}
-
 void RectCollider::MakeMesh()
 {
+    type = RECT;
+    mesh = new Mesh<Vertex>();
 
+    vector<Vertex>& vertices = mesh->GetVertices();
+
+    vertices.emplace_back(-halfSize.x, +halfSize.y, 0.0f);
+    vertices.emplace_back(+halfSize.x, +halfSize.y, 0.0f);
+    vertices.emplace_back(+halfSize.x, -halfSize.y, 0.0f);
+    vertices.emplace_back(-halfSize.x, -halfSize.y, 0.0f);
+    vertices.emplace_back(-halfSize.x, +halfSize.y, 0.0f);
+
+    mesh->CreateMesh();
 }
 
-bool RectCollider::IsAABB(RectCollider* rect, Vector2* overlap)
-{
-    Vector2 halfSize = Size() * 0.5f;    
+//RectCollider::ObbDesc RectCollider::GetObb()
+//{
+//    obbDesc.position = GlobalPos();
+//    obbDesc.halfSize = Half();
+//
+//    obbDesc.axis[0] = Right();
+//    obbDesc.axis[1] = Up();
+//
+//    return obbDesc;
+//}
+//
+//bool RectCollider::IsAABB(RectCollider* rect, Vector2* overlap)
+//{
+//    Vector2 halfSize = Size() * 0.5f;    
+//
+//    float minRight = min(R(), rect->R());
+//    float maxLeft = max(L(), rect->L());
+//    float minTop = min(T(), rect->T());
+//    float maxBottom = max(B(), rect->B());
+//
+//    overlap->x = minRight - maxLeft;
+//    overlap->y = minTop - maxBottom;
+//
+//    if (overlap->x > 0 && overlap->y > 0)
+//        return true;
+//
+//    return false;
+//}
+//
+//bool RectCollider::IsOBB(RectCollider* rect)
+//{
+//    ObbDesc obbA = GetObb();
+//    ObbDesc obbB = rect->GetObb();
+//
+//    if (IsSeperate(obbA.axis[0], obbA, obbB)) return false;
+//    if (IsSeperate(obbA.axis[1], obbA, obbB)) return false;
+//    if (IsSeperate(obbB.axis[0], obbA, obbB)) return false;
+//    if (IsSeperate(obbB.axis[1], obbA, obbB)) return false;
+//
+//    return true;
+//}
+//
+//bool RectCollider::IsSeperate(Vector2 sperateAxis, ObbDesc box1, ObbDesc box2)
+//{
+//    float d = abs(Dot(sperateAxis, box1.position - box2.position));
+//
+//    Vector2 right = box1.axis[0] * box1.halfSize.x;
+//    Vector2 up = box1.axis[1] * box1.halfSize.y;
+//
+//    float a = abs(Dot(sperateAxis, right)) + abs(Dot(sperateAxis, up));
+//
+//    right = box2.axis[0] * box2.halfSize.x;
+//    up = box2.axis[1] * box2.halfSize.y;
+//
+//    float b = abs(Dot(sperateAxis, right)) + abs(Dot(sperateAxis, up));
+//
+//    return d > (a + b);
+//}
 
-    float minRight = min(R(), rect->R());
-    float maxLeft = max(L(), rect->L());
-    float minTop = min(T(), rect->T());
-    float maxBottom = max(B(), rect->B());
+//bool RectCollider::PushCollider(Collider* collider)
+//{
+//    if (IsCollision(collider) == false)
+//        return false;
+//
+//    Direction dir = GetDirection(collider);
+//
+//    Transform* object = collider->GetParent();
+//
+//    switch (dir)
+//    {
+//    case GameMath::Direction::UP:
+//        object->Pos() += Up() * PUSH_SPEED * DELTA;
+//        break;
+//    case GameMath::Direction::DOWN:
+//        object->Pos() += Down() * PUSH_SPEED * DELTA;
+//        break;
+//    case GameMath::Direction::LEFT:
+//        object->Pos() += Left() * PUSH_SPEED * DELTA;
+//        break;
+//    case GameMath::Direction::RIGHT:
+//        object->Pos() += Right() * PUSH_SPEED * DELTA;
+//        break;    
+//    }
+//
+//    return true;
+//}
 
-    overlap->x = minRight - maxLeft;
-    overlap->y = minTop - maxBottom;
-
-    if (overlap->x > 0 && overlap->y > 0)
-        return true;
-
-    return false;
-}
-
-bool RectCollider::IsOBB(RectCollider* rect)
-{
-    ObbDesc obbA = GetObb();
-    ObbDesc obbB = rect->GetObb();
-
-    if (IsSeperate(obbA.axis[0], obbA, obbB)) return false;
-    if (IsSeperate(obbA.axis[1], obbA, obbB)) return false;
-    if (IsSeperate(obbB.axis[0], obbA, obbB)) return false;
-    if (IsSeperate(obbB.axis[1], obbA, obbB)) return false;
-
-    return true;
-}
-
-bool RectCollider::IsSeperate(Vector2 sperateAxis, ObbDesc box1, ObbDesc box2)
-{
-    float d = abs(Dot(sperateAxis, box1.position - box2.position));
-
-    Vector2 right = box1.axis[0] * box1.halfSize.x;
-    Vector2 up = box1.axis[1] * box1.halfSize.y;
-
-    float a = abs(Dot(sperateAxis, right)) + abs(Dot(sperateAxis, up));
-
-    right = box2.axis[0] * box2.halfSize.x;
-    up = box2.axis[1] * box2.halfSize.y;
-
-    float b = abs(Dot(sperateAxis, right)) + abs(Dot(sperateAxis, up));
-
-    return d > (a + b);
-}
-
-bool RectCollider::PushCollider(Collider* collider)
-{
-    if (IsCollision(collider) == false)
-        return false;
-
-    Direction dir = GetDirection(collider);
-
-    Transform* object = collider->GetParent();
-
-    switch (dir)
-    {
-    case GameMath::Direction::UP:
-        object->Pos() += Up() * PUSH_SPEED * DELTA;
-        break;
-    case GameMath::Direction::DOWN:
-        object->Pos() += Down() * PUSH_SPEED * DELTA;
-        break;
-    case GameMath::Direction::LEFT:
-        object->Pos() += Left() * PUSH_SPEED * DELTA;
-        break;
-    case GameMath::Direction::RIGHT:
-        object->Pos() += Right() * PUSH_SPEED * DELTA;
-        break;    
-    }
-
-    return true;
-}
-
-Direction RectCollider::GetDirection(Collider* collider)
-{
-    if (collider->GlobalPos() == GlobalPos())
-        return Direction::NONE;
-
-    Vector2 leftTop = LeftTop() - GlobalPos();
-    Vector2 rightTop = RightTop() - GlobalPos();
-
-    Vector2 direction = collider->GlobalPos() - GlobalPos();
-
-    float crossLeft = Cross(leftTop, direction);
-    float crossRight = Cross(rightTop, direction);
-
-    if (crossLeft * crossRight < 0)//Up || Down
-    {
-        float dot = Dot(Up(), direction.GetNormalized());
-        float angle = acos(dot);
-
-        if (abs(angle) < XM_PIDIV2)
-            return Direction::UP;
-        else
-            return Direction::DOWN;
-    }
-    else//Left || Right
-    {
-        float dot = Dot(Right(), direction.GetNormalized());
-        float angle = acos(dot);
-
-        if (abs(angle) < XM_PIDIV2)
-            return Direction::RIGHT;
-        else
-            return Direction::LEFT;
-    }
-}
+//Direction RectCollider::GetDirection(Collider* collider)
+//{
+//    if (collider->GlobalPos() == GlobalPos())
+//        return Direction::NONE;
+//
+//    Vector2 leftTop = LeftTop() - GlobalPos();
+//    Vector2 rightTop = RightTop() - GlobalPos();
+//
+//    Vector2 direction = collider->GlobalPos() - GlobalPos();
+//
+//    float crossLeft = Cross(leftTop, direction);
+//    float crossRight = Cross(rightTop, direction);
+//
+//    if (crossLeft * crossRight < 0)//Up || Down
+//    {
+//        float dot = Dot(Up(), direction.GetNormalized());
+//        float angle = acos(dot);
+//
+//        if (abs(angle) < XM_PIDIV2)
+//            return Direction::UP;
+//        else
+//            return Direction::DOWN;
+//    }
+//    else//Left || Right
+//    {
+//        float dot = Dot(Right(), direction.GetNormalized());
+//        float angle = acos(dot);
+//
+//        if (abs(angle) < XM_PIDIV2)
+//            return Direction::RIGHT;
+//        else
+//            return Direction::LEFT;
+//    }
+//}

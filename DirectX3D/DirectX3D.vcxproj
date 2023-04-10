@@ -154,6 +154,7 @@
     <ClInclude Include="Framework\Collision\BoxCollider.h" />
     <ClInclude Include="Framework\Collision\CapsuleCollider.h" />
     <ClInclude Include="Framework\Collision\Collider.h" />
+    <ClInclude Include="Framework\Collision\RectCollider.h" />
     <ClInclude Include="Framework\Collision\SphereCollider.h" />
     <ClInclude Include="Framework\Environment\Camera.h" />
     <ClInclude Include="Framework\Environment\Environment.h" />
@@ -235,6 +236,8 @@
     <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Objects\Character\Revenant.h" />
+    <ClInclude Include="Objects\UI\Button.h" />
+    <ClInclude Include="Objects\UI\Item.h" />
     <ClInclude Include="Objects\UI\PlayerUI.h" />
     <ClInclude Include="Objects\UI\Inventory.h" />
     <ClInclude Include="Objects\UI\ProgressBar.h" />
@@ -269,6 +272,7 @@
     <ClCompile Include="Framework\Collision\BoxCollider.cpp" />
     <ClCompile Include="Framework\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Framework\Collision\Collider.cpp" />
+    <ClCompile Include="Framework\Collision\RectCollider.cpp" />
     <ClCompile Include="Framework\Collision\SphereCollider.cpp" />
     <ClCompile Include="Framework\Environment\Camera.cpp" />
     <ClCompile Include="Framework\Environment\Environment.cpp" />
@@ -344,7 +348,9 @@
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
+    <ClCompile Include="Objects\UI\Button.cpp" />
     <ClCompile Include="Objects\UI\Inventory.cpp" />
+    <ClCompile Include="Objects\UI\Item.cpp" />
     <ClCompile Include="Objects\UI\PlayerUI.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
     <ClCompile Include="Objects\Weapon\Bullet.cpp" />

@@ -6,6 +6,8 @@ Quad::Quad(Vector2 size)
     mesh = new Mesh<VertexType>();
     MakeMesh();
     mesh->CreateMesh();
+
+    colorBuffer = new ColorBuffer();
 }
 
 Quad::Quad(wstring file)
@@ -18,12 +20,16 @@ Quad::Quad(wstring file)
     mesh = new Mesh<VertexType>();
     MakeMesh();
     mesh->CreateMesh();
+
+    colorBuffer = new ColorBuffer();
 }
 
 
 Quad::~Quad()
 {    
     delete mesh;
+
+    colorBuffer = new ColorBuffer();
 }
 
 void Quad::Render()
@@ -39,6 +45,7 @@ void Quad::SetRender()
     mesh->GetVertexBuffer()->Set();
     mesh->GetIndexBuffer()->Set();
 
+    colorBuffer->SetPS(0);
     GameObject::SetRender();
 }
 

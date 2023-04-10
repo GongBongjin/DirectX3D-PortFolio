@@ -15,16 +15,24 @@ public:
 	void FontSet();
 
 private:
+	void CloseInven();
+	void OnSelectItem(Button* button);
+
+private:
 	bool isOn = false;
 
-	Quad* quad;
-	Quad* xQuad;
-	vector<Quad*> itemIcons;
+	Quad* inventoryPanel;
+	Button* xButton;
+	vector<Button*> itemIcons;
+	vector<Button*> invenIcons;
+	map<UINT, vector<Button*>> inven;
 
 	RenderTarget* renderTarget;
 	DepthStencil* depthStencil;
-	Quad* depQuad;
+	Quad* characterViewQuad;
 
 	float maxHp;
 	UINT gold;
+
+	void* selectItem;
 };

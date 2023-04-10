@@ -28,7 +28,7 @@ class Collider : public GameObject
 protected:
     enum Type
     {
-        BOX, SPHERE, CAPSULE
+        RECT, BOX, SPHERE, CAPSULE
     };
 
     const float PUSH_SPEED = 100.0f;
@@ -41,10 +41,10 @@ public:
 
     bool IsCollision(Collider* collider);
 
-    virtual bool IsRayCollision(IN Ray ray, OUT Contact* contact = nullptr) = 0;
-    virtual bool IsBoxCollision(class BoxCollider* collider) = 0;
-    virtual bool IsSphereCollision(class SphereCollider* collider) = 0;
-    virtual bool IsCapsuleCollision(class CapsuleCollider* collider) = 0;
+    virtual bool IsRayCollision(IN Ray ray, OUT Contact* contact = nullptr) { return false; }
+    virtual bool IsBoxCollision(class BoxCollider* collider) { return false; }// = 0;
+    virtual bool IsSphereCollision(class SphereCollider* collider) { return false; }// = 0;
+    virtual bool IsCapsuleCollision(class CapsuleCollider* collider) { return false; }// = 0;
 
     bool PushCollision(Collider* collider);
     

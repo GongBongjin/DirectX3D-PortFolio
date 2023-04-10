@@ -1,7 +1,7 @@
 #include "Framework.h"
 
 Button::Button(wstring textureFile)
-    : Quad(textureFile)
+    : Quad(textureFile), textureFile(textureFile)
 {
     collider = new RectCollider(size);
     collider->SetParent(this);
@@ -23,7 +23,7 @@ void Button::Update()
 {
     if (!isActive) return;
 
-    if (collider->IsPointCollision(mousePos))
+    if (collider->IsPointCollision({mousePos.x, mousePos.y}))
     {
         if (KEY_DOWN(VK_LBUTTON))
             isDownCheck = true;
