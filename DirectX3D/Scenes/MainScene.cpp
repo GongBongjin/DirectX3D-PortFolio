@@ -70,7 +70,7 @@ void MainScene::PreRender()
 
 void MainScene::Render()
 {
-	//skybox->Render();
+	skybox->Render();
 	
 	terrain->Render();
 

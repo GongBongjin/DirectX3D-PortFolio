@@ -3,7 +3,8 @@
 class Inventory
 {
 public:
-	Inventory();
+	Inventory(float& dmg, float& defenceValue, float& curHp, float& maxHp, float& hpRecoveryValue,
+		float& curMp, float& maxMp, float& mpRecoveryValue, float& moveSpeed);
 	~Inventory();
 
 	void Update();
@@ -11,28 +12,52 @@ public:
 	void PostRender();
 	void GUIRender();
 
-	void GetPlayerInfo(float maxHp, UINT gold);
 	void FontSet();
 
+	bool& isUIOn() { return isOn; }
+
+	void GetItem(void* selectItem);
+	void UndoItem(void* selectItem);
+	Button* GetBuyButton() { return buyButton; }
+	Button* GetUndoButton() { return undoButton; }
+	vector<Item*>& GetInvenItemData() { return invenItems; }
+	
 private:
+	void CreateInventoryPanel();
+	void CreateStoreItem();
+
 	void CloseInven();
-	void OnSelectItem(Button* button);
+	void OnSelectItem(void* selectItem);
 
 private:
 	bool isOn = false;
 
 	Quad* inventoryPanel;
 	Button* xButton;
-	vector<Button*> itemIcons;
-	vector<Button*> invenIcons;
-	map<UINT, vector<Button*>> inven;
 
+	Button* buyButton;
+	Button* undoButton;
+	vector<Item*> storeItems;
+	
+	vector<Item*> invenItems;
+	//ItemData data;
+	
 	RenderTarget* renderTarget;
 	DepthStencil* depthStencil;
 	Quad* characterViewQuad;
 
-	float maxHp;
-	UINT gold;
+	UINT gold = 1000;
 
-	void* selectItem;
+	float& dmg;
+	float& defenceValue;
+
+	float& curHp;
+	float& maxHp;
+	float& hpRecoveryValue;
+
+	float& curMp;
+	float& maxMp;
+	float& mpRecoveryValue;
+
+	float& moveSpeed;
 };

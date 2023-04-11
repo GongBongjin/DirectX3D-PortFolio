@@ -15,4 +15,6 @@ namespace Utility
     string GetFileNameWithoutExtension(string file);
 
     void CreateFolders(string file);
-}
+
+    string PrintFloat(float& num);
+};

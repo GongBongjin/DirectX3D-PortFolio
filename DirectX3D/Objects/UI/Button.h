@@ -23,7 +23,7 @@ public:
     void SetEvent(Event event) { this->event = event; }
     void SetParamEvent(ParamEvent event) { paramEvent = event; }
     void SetObject(void* object) { this->object = object; }
-    wstring GetFileName() { return textureFile; }
+    //wstring GetFileName() { return textureFile; }
 
     RectCollider* GetCollider() { return collider; }
 
@@ -39,5 +39,5 @@ protected:
 
     void* object;
 
-    wstring textureFile;
+    //wstring textureFile;
 };

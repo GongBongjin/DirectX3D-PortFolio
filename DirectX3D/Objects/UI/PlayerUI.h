@@ -3,7 +3,8 @@
 class PlayerUI
 {
 public:
-	PlayerUI();
+	PlayerUI(float& dmg, float& defenceValue, float& curHp, float& maxHp, float& hpRecoveryValue,
+		float& curMp, float& maxMp, float& mpRecoveryValue, float& moveSpeed);
 	~PlayerUI();
 
 	void Update();
@@ -11,7 +12,10 @@ public:
 	void PostRender();
 	void GUIRender();
 
-	void GetPlayerInfo(float curHp, float maxHp, UINT gold);
+	void CreateMainUI();
+	void SetProgressBar();
+
+	Inventory* GetInven() { return inventory; }
 
 private:
 	Quad* buttonQuad;
@@ -20,8 +24,12 @@ private:
 	ProgressBar* progressBar[2];
 	Inventory* inventory;
 
-	float testp;
-	float curHp;
-	float maxHp;
-	UINT gold;
+	float hpRate;
+	float mpRate;
+
+	float& curHp;
+	float& maxHp;
+
+	float& curMp;
+	float& maxMp;
 };

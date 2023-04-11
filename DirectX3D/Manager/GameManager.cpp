@@ -97,9 +97,11 @@ void GameManager::Create()
     Font::Get()->AddColor("White", 1, 1, 1);
     //Font::Get()->AddStyle("Default", L"배달의민족 주아");
     Font::Get()->AddStyle("Default", L"Beyond The Mountains");
+    //Font::Get()->AddStyle("Default_sizeDown", L"Beyond The Mountains", 10.0f);
     
     Font::Get()->SetColor("White");
     Font::Get()->SetStyle("Default");
+    //Font::Get()->SetStyle("Default_sizeDown");
 
     Texture::Add(L"Textures/Color/White.png");
     

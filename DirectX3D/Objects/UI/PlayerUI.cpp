@@ -1,34 +1,13 @@
 #include "Framework.h"
 
-PlayerUI::PlayerUI()
+PlayerUI::PlayerUI(float& dmg, float& defenceValue, float& curHp, float& maxHp, float& hpRecoveryValue, float& curMp, float& maxMp, float& mpRecoveryValue, float& moveSpeed)
+	: curHp(curHp), maxHp(maxHp), curMp(curMp), maxMp(maxMp)
 {
-	icon[0] = new Quad(L"Textures/UI/Attack.png");
-	icon[0]->SetTag("attackIcon");
-	icon[0]->Load();
+	CreateMainUI();
 
-	icon[1] = new Quad(L"Textures/UI/Reload.png");
-	icon[1]->SetTag("reloadIcon");
-	icon[1]->Load();
-
-	icon[2] = new Quad(L"Textures/UI/PlayerIcon.png");
-	icon[2]->SetTag("playerIcon");
-	icon[2]->Load();
-
-	buttonQuad = new Quad(L"Textures/UI/Revenant_AttackUI.png");
-	buttonQuad->SetTag("quad");
-	buttonQuad->Load();
-
-	barFrame = new Quad(L"Textures/UI/BarFrame.png");
-	barFrame->SetTag("barFrame");
-	barFrame->Load();
-	progressBar[0] = new ProgressBar(L"Textures/UI/hp_bar1.png", L"Textures/UI/hp_bar_BG.png");
-	progressBar[0]->SetTag("Hpbar");
-	progressBar[0]->Load();
-	progressBar[1] = new ProgressBar(L"Textures/UI/hp_bar2.png", L"Textures/UI/hp_bar_BG.png");
-	progressBar[1]->SetTag("Mpbar");
-	progressBar[1]->Load();
-
-	inventory = new Inventory();
+	inventory = new Inventory(dmg, defenceValue, curHp, maxHp, hpRecoveryValue, curMp, maxMp, mpRecoveryValue, moveSpeed);
+	inventory->GetBuyButton()->SetParamEvent(bind(&Inventory::GetItem, inventory, placeholders::_1));
+	//inventory->GetUndoButton()->SetParamEvent(bind(&Inventory::GetItem, inventory, placeholders::_1));
 }
 
 PlayerUI::~PlayerUI()
@@ -55,11 +34,13 @@ void PlayerUI::Update()
 
 	barFrame->UpdateWorld();
 
-	progressBar[0]->SetAmount(testp);
+	SetProgressBar();
+
+	progressBar[0]->SetAmount(hpRate);
 	progressBar[0]->UpdateWorld();
+	progressBar[1]->SetAmount(mpRate);
 	progressBar[1]->UpdateWorld();
 
-	inventory->GetPlayerInfo(maxHp, gold);
 	inventory->Update();
 }
 
@@ -75,7 +56,8 @@ void PlayerUI::PostRender()
 	progressBar[1]->Render();
 	inventory->PostRender();
 
-	Font::Get()->RenderText(to_string((UINT)curHp) + " / " + to_string((UINT)maxHp), { CENTER_X, 50});
+	Font::Get()->RenderText(to_string((UINT)curHp) + " / " + to_string((UINT)maxHp), { CENTER_X + 42, 50});
+	Font::Get()->RenderText(to_string((UINT)curMp) + " / " + to_string((UINT)maxMp), { CENTER_X + 42, 28});
 }
 
 void PlayerUI::GUIRender()
@@ -91,11 +73,37 @@ void PlayerUI::GUIRender()
 	inventory->GUIRender();
 }
 
-void PlayerUI::GetPlayerInfo(float curHp, float maxHp, UINT gold)
+void PlayerUI::CreateMainUI()
 {
-	this->curHp = curHp;
-	this->maxHp = maxHp;
-	this->gold = gold;
+	icon[0] = new Quad(L"Textures/UI/Attack.png");
+	icon[0]->SetTag("attackIcon");
+	icon[0]->Load();
 
-	testp =  curHp / maxHp;
+	icon[1] = new Quad(L"Textures/UI/Reload.png");
+	icon[1]->SetTag("reloadIcon");
+	icon[1]->Load();
+
+	icon[2] = new Quad(L"Textures/UI/PlayerIcon.png");
+	icon[2]->SetTag("playerIcon");
+	icon[2]->Load();
+
+	buttonQuad = new Quad(L"Textures/UI/Revenant_AttackUI.png");
+	buttonQuad->SetTag("quad");
+	buttonQuad->Load();
+
+	barFrame = new Quad(L"Textures/UI/BarFrame.png");
+	barFrame->SetTag("barFrame");
+	barFrame->Load();
+	progressBar[0] = new ProgressBar(L"Textures/UI/hp_bar1.png", L"Textures/UI/hp_bar_BG.png");
+	progressBar[0]->SetTag("Hpbar");
+	progressBar[0]->Load();
+	progressBar[1] = new ProgressBar(L"Textures/UI/hp_bar2.png", L"Textures/UI/hp_bar_BG.png");
+	progressBar[1]->SetTag("Mpbar");
+	progressBar[1]->Load();
+}
+
+void PlayerUI::SetProgressBar()
+{
+	hpRate = curHp / maxHp;
+	mpRate = curMp / maxMp;
 }

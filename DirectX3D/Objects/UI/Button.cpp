@@ -1,7 +1,7 @@
 #include "Framework.h"
 
 Button::Button(wstring textureFile)
-    : Quad(textureFile), textureFile(textureFile)
+    : Quad(textureFile)
 {
     collider = new RectCollider(size);
     collider->SetParent(this);

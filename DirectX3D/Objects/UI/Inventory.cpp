@@ -1,32 +1,11 @@
 #include "Framework.h"
 
-Inventory::Inventory()
+Inventory::Inventory(float& dmg, float& defenceValue, float& curHp, float& maxHp, float& hpRecoveryValue, float& curMp, float& maxMp, float& mpRecoveryValue, float& moveSpeed)
+	:dmg(dmg), defenceValue(defenceValue), curHp(curHp), maxHp(maxHp), hpRecoveryValue(hpRecoveryValue), curMp(curMp), maxMp(maxMp), mpRecoveryValue(mpRecoveryValue), moveSpeed(moveSpeed)
 {
-	inventoryPanel = new Quad(L"Textures/UI/BasicQuad.png");
-	inventoryPanel->SetTag("BasiceQuad");
-	inventoryPanel->Load();
+	CreateInventoryPanel();
 
-	xButton = new Button(L"Textures/UI/Cancel.png");
-	xButton->SetTag("X");
-	xButton->Load();
-	xButton->SetEvent(bind(&Inventory::CloseInven, this));
-
-	vector<wstring> iconName = { {L"hp.png"}, {L"mp.png"}, {L"bow.png"}, {L"helmets.png"} };
-	itemIcons.resize(iconName.size());
-	for (UINT i = 0; i < itemIcons.size(); i++)
-	{
-		itemIcons[i] = new Button(L"Textures/UI/" + iconName[i]);
-		itemIcons[i]->SetTag("icon" + to_string(i));
-		itemIcons[i]->SetParamEvent(bind(&Inventory::OnSelectItem, this, itemIcons[i]));
-		itemIcons[i]->Load();
-	}
-
-	//invenIcons.resize(6);
-	//for (UINT i = 0; i < invenIcons.size(); i++)
-	//{
-	//	invenIcons[i] = new Button(Vector2{5.0f, 5.0f});
-	//	invenIcons[i]->SetTag("inven" + to_string(i));
-	//}
+	CreateStoreItem();
 
 	renderTarget = new RenderTarget();
 	depthStencil = new DepthStencil();
@@ -40,14 +19,15 @@ Inventory::Inventory()
 Inventory::~Inventory()
 {
 	delete inventoryPanel;
-
 	delete xButton;
+	delete buyButton;
+	delete undoButton;
 
-	for (Button* itemIcon : itemIcons)
-		delete itemIcon;
+	for (Item* storeItem : storeItems)
+		delete storeItem;
 
-	for (Button* invenIcon : invenIcons)
-		delete invenIcon;
+	for (Item* invenItem : invenItems)
+		delete invenItem;
 
 	delete renderTarget;
 	delete depthStencil;
@@ -61,19 +41,20 @@ void Inventory::Update()
 		isOn = !isOn;
 
 	inventoryPanel->UpdateWorld();
+	xButton->Update();
+	buyButton->Update();
+	undoButton->Update();
+
+	for (Item* storeItem : storeItems)
+		storeItem->Update();
+
+	if (!invenItems.empty())
+	{
+		for (Item* invenItem : invenItems)
+			invenItem->Update();
+	}
 
 	characterViewQuad->UpdateWorld();
-
-	xButton->Update();
-
-	for (Button* itemIcon : itemIcons)
-		itemIcon->Update();
-
-	if (!invenIcons.empty()) return;
-	{
-		for (Button* invenIcon : invenIcons)
-			invenIcon->Update();
-	}
 }
 
 void Inventory::PreRender()
@@ -85,66 +66,100 @@ void Inventory::PostRender()
 	if (!isOn) return;
 
 	inventoryPanel->Render();
-
-	//renderTarget->Set(depthStencil);
-	//characterViewQuad->Render();
-
 	xButton->Render();
+	buyButton->Render();
+	undoButton->Render();
 
-	for (Button* itemIcon : itemIcons)
-		itemIcon->Render();
+	for (Item* storeItem : storeItems)
+		storeItem->Render();
 
-	if(!invenIcons.empty())
+	if(!invenItems.empty())
 	{
-		for (Button* invenIcon : invenIcons)
+		for (Item* invenItem : invenItems)
 		{
-			invenIcon->Render();
+			invenItem->Render();
 		}
 	}
-
+	//renderTarget->Set(depthStencil);
+	//characterViewQuad->Render();
 	FontSet();
 }
 
 void Inventory::GUIRender()
 {
 	inventoryPanel->GUIRender();
-
-	characterViewQuad->GUIRender();
-
 	xButton->GUIRender();
+	buyButton->GUIRender();
+	undoButton->GUIRender();
 
-	for (Button* itemIcon : itemIcons)
-		itemIcon->GUIRender();
+	for (Item* storeItem : storeItems)
+		storeItem->GUIRender();
 
-	if (!invenIcons.empty())
+	if (!invenItems.empty())
 	{
-		for (Button* invenIcon : invenIcons)
-			invenIcon->GUIRender();
+		for (Item* invenItem : invenItems)
+			invenItem->GUIRender();
 	}
-}
-
-void Inventory::GetPlayerInfo(float maxHp, UINT gold)
-{
-	this->maxHp = maxHp;
-	this->gold = gold;
+	characterViewQuad->GUIRender();
 }
 
 void Inventory::FontSet()
 {
-	//Font::Get()->RenderText("Attack", { 250.0f, 600.0f });
-	//Font::Get()->RenderText("물리 공격력", { 320.0f, 570.0f });
-	//Font::Get()->RenderText("마법 공격력", { 320.0f, 550.0f });
-	//Font::Get()->RenderText("공격 속도", { 300.0f, 530.0f });
-	//Font::Get()->RenderText("Defence", { 260.0f, 400.0f });
-	//Font::Get()->RenderText("물리 방어력", { CENTER_X, 175.0f});
-	//Font::Get()->RenderText("마법 방어력", { CENTER_X, 170.0f });
-	//Font::Get()->RenderText("체력", { CENTER_X, 165.0f });
-	//Font::Get()->RenderText("체력 재생", { CENTER_X, 160.0f });
-	//Font::Get()->RenderText("마나", { CENTER_X, 155.0f });
-	//Font::Get()->RenderText("마나 재생", { CENTER_X, 150.0f });
-	//Font::Get()->RenderText("이동 속도", { CENTER_X, 150.0f });
+	Font::Get()->RenderText(PrintFloat(dmg), { 465.0f, 548.0f });
+	Font::Get()->RenderText("1.0", { 468.0f, 520.0f });
+	Font::Get()->RenderText(PrintFloat(defenceValue), { 465.0f, 408.0f });
+	Font::Get()->RenderText(PrintFloat(curHp), { 392.0f, 380.0f });
+	Font::Get()->RenderText(" / " + PrintFloat(maxHp), {472.0f, 380.0f});
+	Font::Get()->RenderText(PrintFloat(curMp), { 392.0f, 352.0f });
+	Font::Get()->RenderText(" / " + PrintFloat(maxMp), { 472.0f, 352.0f });
+	Font::Get()->RenderText(PrintFloat(hpRecoveryValue), { 465.0f, 324.0f });
+	Font::Get()->RenderText(PrintFloat(mpRecoveryValue), { 465.0f, 296.0f});
+	Font::Get()->RenderText(PrintFloat(moveSpeed), { 465.0f, 187.0f });
+
+	for(int i = 0; i<invenItems.size(); i++)
+	{
+		if(invenItems[i]->GetCount()>1)
+			Font::Get()->RenderText(to_string(invenItems[i]->GetCount()), { 860.0f +(i*45), 257.0f});
+	}
 
 	Font::Get()->RenderText(to_string(gold), { 1030.0f, 215.0f });
+}
+
+void Inventory::CreateInventoryPanel()
+{
+	inventoryPanel = new Quad(L"Textures/UI/BasicQuad.png");
+	inventoryPanel->SetTag("BasiceQuad");
+	inventoryPanel->Load();
+
+	xButton = new Button(L"Textures/UI/Cancel.png");
+	xButton->SetTag("X");
+	xButton->Load();
+	xButton->SetEvent(bind(&Inventory::CloseInven, this));
+
+	buyButton = new Button(L"Textures/UI/buyButton.png");
+	buyButton->SetTag("BuyButton");
+	buyButton->Load();
+
+	undoButton = new Button(L"Textures/UI/undoButton.png");
+	undoButton->SetTag("undoButton");
+	undoButton->Load();
+}
+
+void Inventory::CreateStoreItem()
+{
+	map<UINT, ItemData> itemDatas = DataManager::Get()->GetItemDatas();
+
+	for (pair<UINT, ItemData> itemData : itemDatas)
+	{
+		Item* item = new Item(itemData.second);
+
+		item->SetTag("item" + to_string(itemData.second.key));
+		item->Load();
+		item->SetParamEvent(bind(&Inventory::OnSelectItem, this, item));
+		item->SetObject(item);
+
+		storeItems.push_back(item);
+	}
 }
 
 void Inventory::CloseInven()
@@ -152,21 +167,64 @@ void Inventory::CloseInven()
 	isOn = !isOn;
 }
 
-void Inventory::OnSelectItem(Button* button)
+void Inventory::OnSelectItem(void* selectItem)
 {
-	//if(invenIcons.size() == 1)
+	buyButton->SetObject(selectItem);
+
+	for (Item* storeItem : storeItems)
 	{
-		Button* storeB = new Button(button->GetFileName());
-		storeB->Pos() = {900.0f, 450.0f, 0.0f};
-		storeB->UpdateWorld();
-		storeB->GetCollider()->UpdateWorld();
-
-		for (pair<UINT, vector<Button*>> item : inven)
-		{
-
-		}
-
-		
-		//invenIcons.push_back(storeB);
+		if (selectItem == storeItem)
+			storeItem->SetSelected(true);
+		else
+			storeItem->SetSelected(false);
 	}
 }
+
+void Inventory::GetItem(void* selectItem)
+{
+	if (selectItem == nullptr) return;
+
+	int itemCount = invenItems.size();
+	ItemData data;
+
+	data = ((Item*)selectItem)->GetData();
+
+	if (gold < data.price) return;
+
+	gold -= data.price;
+
+	Item* newItem = new Item(data);
+
+	if(!invenItems.empty())
+	{
+		for (Item* invenItem : invenItems)
+		{
+			if (invenItem->GetData().key == newItem->GetData().key)
+			{
+				if (newItem->GetData().key == 103 || newItem->GetData().key == 104)
+				{
+					gold += data.price;
+					return;
+				}
+
+				invenItem->GetCount()++;
+				return;
+			}
+		}
+		newItem->Pos() = { 847.0f + (itemCount * 45) , 262.0f };
+		invenItems.push_back(newItem);
+	}
+	else
+	{
+		newItem->Pos() = { 847.0f + (itemCount * 45) , 262.0f };
+		invenItems.push_back(newItem);
+	}
+	
+}
+
+//void Inventory::UndoItem(void* selectItem)
+//{
+//	if (selectItem == nullptr) return;
+//
+//	
+//}

@@ -237,6 +237,7 @@
     <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Objects\Character\Revenant.h" />
     <ClInclude Include="Objects\UI\Button.h" />
+    <ClInclude Include="Objects\UI\DataManager.h" />
     <ClInclude Include="Objects\UI\Item.h" />
     <ClInclude Include="Objects\UI\PlayerUI.h" />
     <ClInclude Include="Objects\UI\Inventory.h" />
@@ -349,6 +350,7 @@
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
     <ClCompile Include="Objects\UI\Button.cpp" />
+    <ClCompile Include="Objects\UI\DataManager.cpp" />
     <ClCompile Include="Objects\UI\Inventory.cpp" />
     <ClCompile Include="Objects\UI\Item.cpp" />
     <ClCompile Include="Objects\UI\PlayerUI.cpp" />

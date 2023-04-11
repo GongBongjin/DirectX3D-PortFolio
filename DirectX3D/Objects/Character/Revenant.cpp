@@ -10,6 +10,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     GetMesh(7)->SetMaterial(AddMaterial("Weapon"));
 
     curHp = 40.0f;
+    curMp = 80.0f;
 
     gun = new Transform();
     gunShotPos = new SphereCollider();
@@ -28,8 +29,8 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
     crossHair->UpdateWorld();
 
-    playerUI = new PlayerUI();
-    
+    playerUI = new PlayerUI(dmg, defenceValue, curHp, maxHp, hpRecoveryValue, curMp, maxMp,mpRecoveryValue, moveSpeed);
+   
     ReadClip("Idle");
     ReadClip("Attack"); 
     ReadClip("Reload");
@@ -58,8 +59,9 @@ Revenant::~Revenant()
 void Revenant::Update()
 {
     if (KEY_DOWN('I'))
-        testUI = !testUI;
+        playerUI->GetInven()->isUIOn() != playerUI->GetInven()->isUIOn();
     
+    UseItem();
     IsCollision();
     Control();
     SetAnimation();
@@ -72,7 +74,6 @@ void Revenant::Update()
     gunShotPos->UpdateWorld();
     bodyCollider->UpdateWorld();
 
-    playerUI->GetPlayerInfo(curHp, maxHp, gold);
     playerUI->Update();
 }
 
@@ -108,12 +109,12 @@ void Revenant::Control()
 
 void Revenant::Move()
 {
-    //if (curState == ATTACK)
-    //{
-    //    velocity.x = 0;
-    //    velocity.z = 0;
-    //    return;
-    //}
+    if (curState == ATTACK)
+    {
+        velocity.x = 0;
+        velocity.z = 0;
+        return;
+    }
 
     bool isMoveZ = false;
     bool isMoveX = false;
@@ -161,7 +162,7 @@ void Revenant::Rotate()
     Vector3 delta;
     //다시 정상적인 상태로 돌아왔을때 마우스위치변화에 따른 로테이션값 변화를 적용해야함.
 
-    if (testUI)
+    if (!playerUI->GetInven()->isUIOn())
     {
         delta = mousePos - Vector3(CENTER_X, CENTER_Y);
         SetCursorPos(clientCenterPos.x, clientCenterPos.y);
@@ -177,7 +178,7 @@ void Revenant::Rotate()
 
 void Revenant::Attack()
 {
-    if (!testUI) return;
+    if (playerUI->GetInven()->isUIOn()) return;
     if (curState == ATTACK) return;
     if (curState == RELOAD) return;
 
@@ -200,6 +201,8 @@ void Revenant::Attack()
 
 void Revenant::Reload()
 {
+    if (playerUI->GetInven()->isUIOn()) return;
+
     if (KEY_DOWN(VK_RBUTTON))
     {
         SetState(RELOAD);
@@ -258,6 +261,76 @@ void Revenant::IsCollision()
             Pos() += direction.GetNormalized();
         }
     }
+}
+
+void Revenant::UseItem()
+{
+    if (!playerUI->GetInven()->GetInvenItemData().empty());
+    {
+        vector<Item*> tmp = playerUI->GetInven()->GetInvenItemData();
+        
+        for (int i = 0; i < tmp.size(); i++)
+        {
+            switch (tmp[i]->GetData().key)
+            {
+            case HP:
+                if (KEY_DOWN('1'))
+                {
+                    tmp[i]->GetCount()--;
+                    hpRecoveryValue = 3.0f;
+                    isTakeHpPosion = true;
+                }
+                break;
+            case MP:
+                if (KEY_DOWN('2'))
+                {
+                    tmp[i]->GetCount()--;
+                    mpRecoveryValue = 3.0f;
+                    isTakeMpPosion = true;
+                }
+                break;
+            case BOW:
+                if(tmp[i]->GetCount() > 0)
+                    dmg = 30.0f;
+                break;
+            case HELMETS:
+                if (tmp[i]->GetCount() > 0)
+                {
+                    defenceValue = 20.0f;
+                    maxHp = 200.0f;
+                }
+                break;
+            }
+        }    
+    }
+
+    if(isTakeHpPosion)
+        hpPosionTime += DELTA;
+
+    if(isTakeMpPosion)
+        mpPosionTime += DELTA;
+
+    if (hpPosionTime > POSION_TIME)
+    {
+        hpPosionTime -= POSION_TIME;
+        hpRecoveryValue = 1.0f;
+    }
+
+    if (mpPosionTime > POSION_TIME)
+    {
+        mpPosionTime -= POSION_TIME;
+        mpRecoveryValue = 1.0f;
+    }
+
+    if (curHp >= maxHp)
+        curHp = maxHp;
+    else
+        curHp += hpRecoveryValue * DELTA;
+
+    if (curMp >= maxMp)
+        curMp = maxMp;
+    else
+        curMp += mpRecoveryValue * DELTA;    
 }
 
 void Revenant::SetIdle()

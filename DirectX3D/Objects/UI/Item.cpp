@@ -1,7 +1,7 @@
 #include "Framework.h"
 
-Item::Item(wstring textureFile)
-	:Button(textureFile)
+Item::Item(ItemData itemData)
+	:itemData(itemData), Button(L"Textures/UI/"+itemData.fileName)
 {
 
 }

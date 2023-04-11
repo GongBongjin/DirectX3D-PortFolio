@@ -1,25 +1,23 @@
 #pragma once
 
-struct ItemData
-{
-	string name;
-	UINT price;
-};
-
 class Item : public Button
 {
 public:
-	Item(wstring textureFile);
+	Item(ItemData itemData);
 	~Item();
 
 	void Update();
 	void Render();
 	void GUIRender();
 
-	void SetSelected(bool selected) { isSelected = selected; }
+	void SetSelected(bool isSelected) { this->isSelected = isSelected; }
 
+	ItemData GetData() { return itemData; }
+	int& GetCount() { return count; }
 private:
-	ItemData* itemData;
+	ItemData itemData;
+
+	int count = 1;
 
 	bool isSelected;
 };

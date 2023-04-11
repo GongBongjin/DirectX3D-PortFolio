@@ -95,3 +95,12 @@ void Utility::CreateFolders(string file)
             CreateDirectoryA(temp.c_str(), 0);
     }
 }
+
+string Utility::PrintFloat(float& num)
+{
+    string tmp = to_string(num);
+
+    size_t index = tmp.find_last_of('.');
+
+    return tmp.substr(0, index+2);
+}

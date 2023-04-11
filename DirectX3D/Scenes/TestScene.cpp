@@ -36,7 +36,6 @@ void TestScene::Render()
 void TestScene::PostRender()
 {
 	revenant-> PostRender();
-
 }
 
 void TestScene::GUIRender()
