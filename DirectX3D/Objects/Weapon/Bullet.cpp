@@ -12,11 +12,27 @@ Bullet::Bullet(Transform* transform)
 	collider->Rot().x = XM_PIDIV2;
 	collider->Rot().y = XM_PIDIV2;
 	collider->SetTag("B_Collider");
+
+	startEdge = new Transform();
+	startEdge->SetParent(transform);
+	startEdge->Pos() = { 0,5,0 };
+
+	endEdge = new Transform();
+	endEdge->SetParent(transform);
+	endEdge->Pos() = { 0,-5,0 };
+
+	trail = new Trail(L"Textures/Effect/Trail.png", startEdge, endEdge, 1, 10.0f);
+	trail->SetParent(transform);
 }
 
 Bullet::~Bullet()
 {
 	delete collider;
+
+	delete trail;
+
+	delete startEdge;
+	delete endEdge;
 }
 
 void Bullet::Update()
@@ -26,16 +42,29 @@ void Bullet::Update()
 	time += DELTA;
 	
 	if (time > LIFE_TIME)
+	{
 		transform->SetActive(false);
+		trail->SetActive(false);
+	}
 	
 	transform->Pos() += direction * speed * DELTA;
 
 	collider->UpdateWorld();
+
+	//startEdge->Pos() = transform->GlobalPos() + transform->Up() * 1.0f;
+	//endEdge->Pos() = transform->GlobalPos() - transform->Up() * 1.0f;
+
+	startEdge->UpdateWorld();
+	endEdge->UpdateWorld();
+
+	trail->Update();
 }
 
 void Bullet::Render()
 {
 	collider->Render();
+
+	trail->Render();
 }
 
 void Bullet::GUIRender()
@@ -46,8 +75,15 @@ void Bullet::GUIRender()
 void Bullet::Shoot(Vector3 pos, Vector3 dir)
 {
 	transform->SetActive(true);
+	trail->SetActive(true);
 
 	transform->Pos() = pos;
+	trail->Pos() = pos;
+
+	trail->SetPos(pos);
+	transform->UpdateWorld();
+	trail->UpdateWorld();
+
 	direction = dir;
 
 	transform->Rot().y = atan2(dir.x, dir.z) - XM_PIDIV2;

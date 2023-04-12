@@ -2,13 +2,14 @@
 
 class Revenant : public ModelAnimator
 {
-
 private:
     enum State
     {
         IDLE,
         ATTACK,
         RELOAD,
+        HITTED,
+        DYING,
         MOVE_FORWARD
     }curState = IDLE;
 
@@ -35,12 +36,19 @@ public:
     void GetTerrain(Terrain* terrain) { this->terrain = terrain; }
     void GetBuildingCollider(vector<BoxCollider*> buildingColliders) { this->buildingColliders = buildingColliders; }
 
+    float GetDmg() { return dmg; }
+    void GetGold(UINT gold);
+    void Hitted(float targetdmg);
+    
+    CapsuleCollider* GetBodyCollider() { return bodyCollider; }
+
 private:
     void Control();
     void Move();
     void Rotate();
     void Attack();
     void Reload();
+    void Dying();
 
     void SetAnimation();
     void SetState(State state);
@@ -53,6 +61,7 @@ private:
 //Event Function
 private:
     void SetIdle();
+    void SetDead();
 
 
 private:
@@ -86,7 +95,7 @@ private:
     UINT shootCount = 0;
     const UINT maxShootCount = 4;
 
-    UINT gold= 500;
+    vector<Item*> invenItems;
 
     Vector3 velocity;
     Vector3 targetPos;
@@ -99,6 +108,4 @@ private:
     Terrain* terrain;
 
     vector<BoxCollider*> buildingColliders;
-
-    bool testUI;
 };

@@ -14,6 +14,5 @@ public:
 	virtual void GUIRender() override;
 
 private:
-	Revenant* revenant;
-	Inventory* inventory;
+	Bullet* bullet;
 };

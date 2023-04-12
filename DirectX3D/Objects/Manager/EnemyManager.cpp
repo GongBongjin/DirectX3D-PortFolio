@@ -99,6 +99,8 @@ void EnemyManager::Render()
 
 void EnemyManager::PostRender()
 {
+	for (Enemy* enemy : enemies)
+		enemy->PostRender();
 }
 
 void EnemyManager::GUIRender()
@@ -110,7 +112,7 @@ void EnemyManager::GUIRender()
 	}
 }
 
-void EnemyManager::SetTarget(Transform* target)
+void EnemyManager::SetTarget(Revenant* target)
 {
 	this->target = target;
 
@@ -144,7 +146,24 @@ void EnemyManager::Collision()
 		if (BulletManager::Get()->IsCollision(enemy->GetCollider()))
 		{
 			enemy->Hitted();
-			return;
+
+			if (enemy->GetHp() < 1)
+			{
+				enemy->isDead();
+				target->GetGold(15);
+			}
+			break;
+		}
+	}
+
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->GetAtkCollider()->IsCollision(target->GetBodyCollider()))
+		{
+			enemy->EndAttack();
+
+			target->Hitted(enemy->GetDmg());
+			break;
 		}
 	}
 }

@@ -11,7 +11,7 @@ Quad::Quad(Vector2 size)
 }
 
 Quad::Quad(wstring file)
-    : GameObject(L"Basic/Texture.hlsl")
+    : GameObject(L"Basic/Texture.hlsl"), fileName(file)
 {
     Texture* texture = Texture::Add(file);
     material->SetDiffuseMap(file);

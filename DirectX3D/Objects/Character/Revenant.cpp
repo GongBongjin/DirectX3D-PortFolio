@@ -22,7 +22,6 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     bodyCollider->SetParent(root);
     bodyCollider->Load();
     
-    testUI = true;
     ClientToScreen(hWnd, &clientCenterPos);
     
     crossHair = new Quad(L"Textures/UI/cursor.png");
@@ -30,16 +29,20 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     crossHair->UpdateWorld();
 
     playerUI = new PlayerUI(dmg, defenceValue, curHp, maxHp, hpRecoveryValue, curMp, maxMp,mpRecoveryValue, moveSpeed);
-   
+       
     ReadClip("Idle");
     ReadClip("Attack"); 
     ReadClip("Reload");
+    ReadClip("Hitted");
+    ReadClip("Dying");
     ReadClip("MoveForward");
 
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.0f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.75f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::SetIdle, this), 1.0f);
     GetClip(RELOAD)->SetEvent(bind(&Revenant::SetIdle, this), 0.70f);
+    GetClip(HITTED)->SetEvent(bind(&Revenant::SetIdle, this), 0.75f);
+    GetClip(DYING)->SetEvent(bind(&Revenant::SetDead, this), 0.9f);
 }
 
 Revenant::~Revenant()
@@ -58,6 +61,8 @@ Revenant::~Revenant()
 
 void Revenant::Update()
 {
+    if (!isActive) return;
+
     if (KEY_DOWN('I'))
         playerUI->GetInven()->isUIOn() != playerUI->GetInven()->isUIOn();
     
@@ -79,6 +84,8 @@ void Revenant::Update()
 
 void Revenant::Render()
 {
+    if (!isActive) return;
+
     ModelAnimator::Render();
 
     bodyCollider->Render();
@@ -86,6 +93,8 @@ void Revenant::Render()
 
 void Revenant::PostRender()
 {
+    if (!isActive) return;
+
     crossHair->Render();
 
     playerUI->PostRender();
@@ -99,8 +108,23 @@ void Revenant::GUIRender()
     playerUI->GUIRender();
 }
 
+void Revenant::GetGold(UINT gold)
+{
+    playerUI->GetInven()->GetGold(gold);
+}
+
+void Revenant::Hitted(float targetdmg)
+{
+    if (curState == DYING) return;
+
+    SetState(HITTED);
+
+    curHp -= targetdmg;
+}
+
 void Revenant::Control()
 {
+    Dying();
     Rotate();
     Move();
     Attack();
@@ -109,12 +133,14 @@ void Revenant::Control()
 
 void Revenant::Move()
 {
-    if (curState == ATTACK)
+    if (curState == ATTACK || curState == RELOAD)
     {
         velocity.x = 0;
         velocity.z = 0;
         return;
     }
+
+    if (curState == DYING) return;
 
     bool isMoveZ = false;
     bool isMoveX = false;
@@ -181,6 +207,7 @@ void Revenant::Attack()
     if (playerUI->GetInven()->isUIOn()) return;
     if (curState == ATTACK) return;
     if (curState == RELOAD) return;
+    if (curState == DYING) return;
 
     if (KEY_DOWN(VK_LBUTTON))
     {
@@ -202,6 +229,7 @@ void Revenant::Attack()
 void Revenant::Reload()
 {
     if (playerUI->GetInven()->isUIOn()) return;
+    if (curState == DYING) return;
 
     if (KEY_DOWN(VK_RBUTTON))
     {
@@ -210,10 +238,21 @@ void Revenant::Reload()
     }
 }
 
+void Revenant::Dying()
+{
+    if (curHp < 1)
+    {
+        curHp = 0;
+        SetState(DYING);
+    }
+}
+
 void Revenant::SetAnimation()
 {
     if (curState == ATTACK) return;
     if (curState == RELOAD) return;
+    if (curState == HITTED) return;
+    if (curState == DYING) return;
 
     if (velocity.z > 0.1f)
         SetState(MOVE_FORWARD);
@@ -265,6 +304,8 @@ void Revenant::IsCollision()
 
 void Revenant::UseItem()
 {
+    if (curState == DYING) return;
+
     if (!playerUI->GetInven()->GetInvenItemData().empty());
     {
         vector<Item*> tmp = playerUI->GetInven()->GetInvenItemData();
@@ -276,27 +317,37 @@ void Revenant::UseItem()
             case HP:
                 if (KEY_DOWN('1'))
                 {
-                    tmp[i]->GetCount()--;
-                    hpRecoveryValue = 3.0f;
-                    isTakeHpPosion = true;
+                    if(tmp[i]->GetCount()>0)
+                    {
+                        playerUI->GetInven()->UseItem(tmp[i]);
+                        if(curHp!=maxHp)
+                            hpRecoveryValue = 3.0f;
+                        isTakeHpPosion = true;
+                    }
                 }
                 break;
             case MP:
                 if (KEY_DOWN('2'))
                 {
-                    tmp[i]->GetCount()--;
-                    mpRecoveryValue = 3.0f;
-                    isTakeMpPosion = true;
+                    if(tmp[i]->GetCount()>0)
+                    {
+                        playerUI->GetInven()->UseItem(tmp[i]);
+                        mpRecoveryValue = 3.0f;
+                        isTakeMpPosion = true;
+                    }
                 }
                 break;
             case BOW:
-                if(tmp[i]->GetCount() > 0)
+                if (tmp[i]->GetCount() > 0)
+                {
                     dmg = 30.0f;
+                    maxMp = 150.0f;
+                }
                 break;
             case HELMETS:
                 if (tmp[i]->GetCount() > 0)
                 {
-                    defenceValue = 20.0f;
+                    defenceValue = 40.0f;
                     maxHp = 200.0f;
                 }
                 break;
@@ -314,21 +365,29 @@ void Revenant::UseItem()
     {
         hpPosionTime -= POSION_TIME;
         hpRecoveryValue = 1.0f;
+        isTakeHpPosion = false;
     }
 
     if (mpPosionTime > POSION_TIME)
     {
         mpPosionTime -= POSION_TIME;
         mpRecoveryValue = 1.0f;
+        isTakeMpPosion = false;
     }
 
     if (curHp >= maxHp)
+    {
         curHp = maxHp;
+        hpRecoveryValue = 1.0f;
+    }
     else
         curHp += hpRecoveryValue * DELTA;
 
     if (curMp >= maxMp)
+    {
         curMp = maxMp;
+        mpRecoveryValue = 1.0f;
+    }
     else
         curMp += mpRecoveryValue * DELTA;    
 }
@@ -336,4 +395,11 @@ void Revenant::UseItem()
 void Revenant::SetIdle()
 {
     SetState(IDLE);
+}
+
+void Revenant::SetDead()
+{
+    bodyCollider->SetActive(false);
+
+    isActive = false;
 }

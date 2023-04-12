@@ -7,7 +7,9 @@ public:
     ~Trail();
 
     void Update();
-    void Render();    
+    void Render();
+
+    void SetPos(Vector3 pos);
 
 private:
     void CreateMesh();

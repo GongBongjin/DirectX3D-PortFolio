@@ -6,14 +6,6 @@ Inventory::Inventory(float& dmg, float& defenceValue, float& curHp, float& maxHp
 	CreateInventoryPanel();
 
 	CreateStoreItem();
-
-	renderTarget = new RenderTarget();
-	depthStencil = new DepthStencil();
-	characterViewQuad = new Quad(L"Textures/UI/RenderTargetQuad.png");
-	characterViewQuad->GetMaterial()->SetShader(L"Effect/Bloom.hlsl");
-	characterViewQuad->GetMaterial()->SetDiffuseMap(Texture::Add(L"Test", renderTarget->GetSRV()));
-	characterViewQuad->SetTag("characterViewQuad");
-	characterViewQuad->Load();
 }
 
 Inventory::~Inventory()
@@ -28,11 +20,6 @@ Inventory::~Inventory()
 
 	for (Item* invenItem : invenItems)
 		delete invenItem;
-
-	delete renderTarget;
-	delete depthStencil;
-
-	delete characterViewQuad;
 }
 
 void Inventory::Update()
@@ -54,7 +41,11 @@ void Inventory::Update()
 			invenItem->Update();
 	}
 
-	characterViewQuad->UpdateWorld();
+	if(!quickslotItems.empty())
+	{
+		for (Quad* quickItem : quickslotItems)
+			quickItem->UpdateWorld();
+	}
 }
 
 void Inventory::PreRender()
@@ -63,26 +54,38 @@ void Inventory::PreRender()
 
 void Inventory::PostRender()
 {
-	if (!isOn) return;
-
-	inventoryPanel->Render();
-	xButton->Render();
-	buyButton->Render();
-	undoButton->Render();
-
-	for (Item* storeItem : storeItems)
-		storeItem->Render();
-
-	if(!invenItems.empty())
+	if (isOn)
 	{
-		for (Item* invenItem : invenItems)
+		inventoryPanel->Render();
+		xButton->Render();
+		buyButton->Render();
+		undoButton->Render();
+
+		for (Item* storeItem : storeItems)
+			storeItem->Render();
+
+		if (!invenItems.empty())
 		{
-			invenItem->Render();
+			for (Item* invenItem : invenItems)
+			{
+				invenItem->Render();
+			}
 		}
+		//renderTarget->Set(depthStencil);
+		//characterViewQuad->Render();
+		FontSet();
 	}
-	//renderTarget->Set(depthStencil);
-	//characterViewQuad->Render();
-	FontSet();
+
+	for (Quad* quickItem : quickslotItems)
+		quickItem->Render();
+
+	for (int i = 0; i < invenItems.size(); i++)
+	{
+		if (invenItems[i]->GetData().key == 103 || invenItems[i]->GetData().key == 104) continue;
+
+		if (invenItems[i]->GetCount() >= 1)
+			Font::Get()->RenderText(to_string(invenItems[i]->GetCount()), { 932.0f + (i * 45), 31.0f });
+	}
 }
 
 void Inventory::GUIRender()
@@ -100,7 +103,11 @@ void Inventory::GUIRender()
 		for (Item* invenItem : invenItems)
 			invenItem->GUIRender();
 	}
-	characterViewQuad->GUIRender();
+	if(!quickslotItems.empty())
+	{
+		for (Quad* quickItem : quickslotItems)
+			quickItem->GUIRender();
+	}
 }
 
 void Inventory::FontSet()
@@ -118,8 +125,11 @@ void Inventory::FontSet()
 
 	for(int i = 0; i<invenItems.size(); i++)
 	{
-		if(invenItems[i]->GetCount()>1)
-			Font::Get()->RenderText(to_string(invenItems[i]->GetCount()), { 860.0f +(i*45), 257.0f});
+		if (invenItems[i]->GetData().key == 103 || invenItems[i]->GetData().key == 104) continue;
+
+		if(invenItems[i]->GetCount()>=1)
+			Font::Get()->RenderText(to_string(invenItems[i]->GetCount()), { 860.0f + (i * 45), 257.0f });
+
 	}
 
 	Font::Get()->RenderText(to_string(gold), { 1030.0f, 215.0f });
@@ -180,6 +190,19 @@ void Inventory::OnSelectItem(void* selectItem)
 	}
 }
 
+void Inventory::OnSelectInvenItem(void* selectItem)
+{
+	undoButton->SetObject(selectItem);
+
+	for (Item* invenItem : invenItems)
+	{
+		if (selectItem == invenItem)
+			invenItem->SetSelected(true);
+		else
+			invenItem->SetSelected(false);
+	}
+}
+
 void Inventory::GetItem(void* selectItem)
 {
 	if (selectItem == nullptr) return;
@@ -194,6 +217,7 @@ void Inventory::GetItem(void* selectItem)
 	gold -= data.price;
 
 	Item* newItem = new Item(data);
+	Quad* quicksloatItem = new Quad(L"Textures/UI/"+data.fileName);
 
 	if(!invenItems.empty())
 	{
@@ -212,19 +236,68 @@ void Inventory::GetItem(void* selectItem)
 			}
 		}
 		newItem->Pos() = { 847.0f + (itemCount * 45) , 262.0f };
+		newItem->SetParamEvent(bind(&Inventory::OnSelectInvenItem, this, newItem));
 		invenItems.push_back(newItem);
+
+		quicksloatItem->Pos() = { (919.0f + itemCount * 45), 36.0f };
+		quickslotItems.push_back(quicksloatItem);
 	}
 	else
 	{
 		newItem->Pos() = { 847.0f + (itemCount * 45) , 262.0f };
+		newItem->SetParamEvent(bind(&Inventory::OnSelectInvenItem, this, newItem));
 		invenItems.push_back(newItem);
+
+		quicksloatItem->Pos() = { (919.0f + itemCount * 45), 36.0f };
+		quickslotItems.push_back(quicksloatItem);
 	}
 	
 }
 
-//void Inventory::UndoItem(void* selectItem)
-//{
-//	if (selectItem == nullptr) return;
-//
-//	
-//}
+void Inventory::UndoItem(void* selectItem)
+{
+	if (selectItem == nullptr) return;
+
+	for (Item* invenItem : invenItems)
+	{
+		if (((Item*)selectItem)->GetData().key == invenItem->GetData().key)
+		{
+			if (invenItem->GetCount() <= 1)
+			{
+				invenItems.erase(remove(invenItems.begin(), invenItems.end(), invenItem), invenItems.end());
+			}
+
+			invenItem->GetCount()--;
+			gold += invenItem->GetData().price;
+			return;
+		}
+	}
+
+	//for (Quad* quickslotItem : quickslotItems)
+	//{
+	//	if (((Item*)selectItem)->GetData().fileName == L"Textures/UI/" + quickslotItem->GetFileName())
+	//	{
+	//		if (invenItem->GetCount() <= 1)
+	//		{
+	//			invenItems.erase(remove(invenItems.begin(), invenItems.end(), invenItem), invenItems.end());
+	//		}
+}
+
+void Inventory::UseItem(void* selectItem)
+{
+	for (Item* invenItem : invenItems)
+	{
+		if (((Item*)selectItem)->GetData().key == invenItem->GetData().key)
+		{
+			if (invenItem->GetCount() <= 1)
+			{
+				invenItems.erase(remove(invenItems.begin(), invenItems.end(), invenItem), invenItems.end());
+				//quickslotItems.erase(remove(quickslotItems.begin(), quickslotItems.end(), invenItem), quickslotItems.end());
+			}
+			invenItem->GetCount()--;
+			return;
+		}
+	}
+}
+
+//아이템 사용 혹은 undo 시에 퀵슬롯 쿼드 내용 삭제 해야함

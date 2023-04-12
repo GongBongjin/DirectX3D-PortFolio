@@ -70,11 +70,11 @@ void MainScene::PreRender()
 
 void MainScene::Render()
 {
-	skybox->Render();
+	//skybox->Render();
 	
-	terrain->Render();
+	//terrain->Render();
 
-	aStar->Render();
+	//aStar->Render();
 
 	BuildingManager::Get()->Render();
 
@@ -88,6 +88,8 @@ void MainScene::Render()
 void MainScene::PostRender()
 {
 	revenant->PostRender();
+
+	EnemyManager::Get()->PostRender();
 }
 
 void MainScene::GUIRender()
@@ -96,11 +98,11 @@ void MainScene::GUIRender()
 
 	//BuildingManager::Get()->GUIRender();
 
-	revenant->GUIRender();
+	//revenant->GUIRender();
 
 	//BulletManager::Get()->GUIRender();
 
-	//EnemyManager::Get()->GUIRender();
+	EnemyManager::Get()->GUIRender();
 }
 
 void MainScene::Start()

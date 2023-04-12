@@ -15,6 +15,7 @@ public:
 
     Vector2 GetSize() { return size; }
 
+    wstring GetFileName() { return fileName; }
 private:
     void MakeMesh();
 
@@ -22,4 +23,7 @@ protected:
     Mesh<VertexType>* mesh;
     ColorBuffer* colorBuffer = nullptr;
     Vector2 size;
+
+private:
+    wstring fileName;
 };

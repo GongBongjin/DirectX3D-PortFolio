@@ -18,6 +18,10 @@ public:
 
 	void GetItem(void* selectItem);
 	void UndoItem(void* selectItem);
+	void UseItem(void* selectItem);
+	
+	UINT GetGold(UINT gold) { return this->gold += gold; }
+
 	Button* GetBuyButton() { return buyButton; }
 	Button* GetUndoButton() { return undoButton; }
 	vector<Item*>& GetInvenItemData() { return invenItems; }
@@ -28,6 +32,7 @@ private:
 
 	void CloseInven();
 	void OnSelectItem(void* selectItem);
+	void OnSelectInvenItem(void* selectItem);
 
 private:
 	bool isOn = false;
@@ -40,11 +45,7 @@ private:
 	vector<Item*> storeItems;
 	
 	vector<Item*> invenItems;
-	//ItemData data;
-	
-	RenderTarget* renderTarget;
-	DepthStencil* depthStencil;
-	Quad* characterViewQuad;
+	vector<Quad*> quickslotItems;
 
 	UINT gold = 1000;
 

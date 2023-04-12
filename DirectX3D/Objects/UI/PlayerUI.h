@@ -21,6 +21,8 @@ private:
 	Quad* buttonQuad;
 	Quad* icon[3];
 	Quad* barFrame;
+	Quad* quickSloatQuad;
+
 	ProgressBar* progressBar[2];
 	Inventory* inventory;
 

@@ -7,7 +7,7 @@ PlayerUI::PlayerUI(float& dmg, float& defenceValue, float& curHp, float& maxHp, 
 
 	inventory = new Inventory(dmg, defenceValue, curHp, maxHp, hpRecoveryValue, curMp, maxMp, mpRecoveryValue, moveSpeed);
 	inventory->GetBuyButton()->SetParamEvent(bind(&Inventory::GetItem, inventory, placeholders::_1));
-	//inventory->GetUndoButton()->SetParamEvent(bind(&Inventory::GetItem, inventory, placeholders::_1));
+	inventory->GetUndoButton()->SetParamEvent(bind(&Inventory::UndoItem, inventory, placeholders::_1));
 }
 
 PlayerUI::~PlayerUI()
@@ -16,7 +16,7 @@ PlayerUI::~PlayerUI()
 	delete icon[0];
 	delete icon[1];
 	delete icon[2];
-
+	delete quickSloatQuad;
 	delete barFrame;
 	delete progressBar[0];
 	delete progressBar[1];
@@ -32,14 +32,10 @@ void PlayerUI::Update()
 	icon[1]->UpdateWorld();
 	icon[2]->UpdateWorld();
 
+	quickSloatQuad->UpdateWorld();
 	barFrame->UpdateWorld();
 
 	SetProgressBar();
-
-	progressBar[0]->SetAmount(hpRate);
-	progressBar[0]->UpdateWorld();
-	progressBar[1]->SetAmount(mpRate);
-	progressBar[1]->UpdateWorld();
 
 	inventory->Update();
 }
@@ -50,7 +46,7 @@ void PlayerUI::PostRender()
 	icon[1]->Render();
 	icon[2]->Render();
 	buttonQuad->Render();
-
+	quickSloatQuad->Render();
 	barFrame->Render();
 	progressBar[0]->Render();
 	progressBar[1]->Render();
@@ -66,7 +62,7 @@ void PlayerUI::GUIRender()
 	icon[0]->GUIRender();
 	icon[1]->GUIRender();
 	icon[2]->GUIRender();
-
+	quickSloatQuad->GUIRender();
 	barFrame->GUIRender();
 	progressBar[0]->GUIRender();
 	progressBar[1]->GUIRender();
@@ -91,6 +87,10 @@ void PlayerUI::CreateMainUI()
 	buttonQuad->SetTag("quad");
 	buttonQuad->Load();
 
+	quickSloatQuad = new Quad(L"Textures/UI/quickSlot.png");
+	quickSloatQuad->SetTag("quickSloatQuad");
+	quickSloatQuad->Load();	
+
 	barFrame = new Quad(L"Textures/UI/BarFrame.png");
 	barFrame->SetTag("barFrame");
 	barFrame->Load();
@@ -106,4 +106,9 @@ void PlayerUI::SetProgressBar()
 {
 	hpRate = curHp / maxHp;
 	mpRate = curMp / maxMp;
+
+	progressBar[0]->SetAmount(hpRate);
+	progressBar[0]->UpdateWorld();
+	progressBar[1]->SetAmount(mpRate);
+	progressBar[1]->UpdateWorld();
 }

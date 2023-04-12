@@ -15,7 +15,7 @@ public:
 	void PostRender();
 	void GUIRender();
 
-	void SetTarget(Transform* target);
+	void SetTarget(Revenant* target);
 	bool IsCollision(Ray ray, Vector3& hitPoint);
 
 	//test
@@ -30,7 +30,7 @@ private:
 	ModelAnimatorInstancing* enemyInstancing[3];
 	vector<Enemy*> enemies;
 
-	Transform* target;
+	Revenant* target;
 
 	float spawnTime = 0.0f;
 

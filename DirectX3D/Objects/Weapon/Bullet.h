@@ -25,4 +25,9 @@ private:
 
 	float speed = 75.0f;
 	float time = 0.0f;
+
+	Transform* startEdge;
+	Transform* endEdge;
+	
+	Trail* trail;
 };

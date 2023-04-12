@@ -11,12 +11,12 @@ ModelAnimationScene::ModelAnimationScene()
     //modelAnimator->GetMesh(4)->SetMaterial(modelAnimator->AddMaterial("Darkness"));
     //modelAnimator->GetMesh(7)->SetMaterial(modelAnimator->AddMaterial("Weapon"));
 
-    //modelAnimator->ReadClip("Idle");
+    modelAnimator->ReadClip("Dying");
     //modelAnimator->ReadClip("MoveForward");
     //modelAnimator->ReadClip("Attack");
     //modelAnimator->ReadClip("Attack1");
     //modelAnimator->ReadClip("Hitted");
-    modelAnimator->ReadClip("Reload");
+    //modelAnimator->ReadClip("Reload");
     //modelAnimator->ReadClip("Dying");
 
     //modelAnimator->ReadClip("Arms", 3);

@@ -7,25 +7,34 @@ Enemy::Enemy(Transform* transform, ModelAnimatorInstancing* instancing, UINT ind
 	totalEvent.resize(instancing->GetClipSize());
 	eventIters.resize(instancing->GetClipSize());
 
+	SetEvent(ATTACK, bind(&Enemy::StartAttack, this), 0.0f);
 	SetEvent(ATTACK, bind(&Enemy::ComboAttack, this), 0.9f);
+	SetEvent(ATTACK1, bind(&Enemy::StartAttack, this), 0.0f);
 	SetEvent(ATTACK1, bind(&Enemy::SetIdle, this), 0.9f);
+	SetEvent(ATTACK1, bind(&Enemy::EndAttack, this), 0.9f);
 	SetEvent(HITTED, bind(&Enemy::SetIdle, this), 0.9f);
 	SetEvent(DYING, bind(&Enemy::EndDyingDC, this), 0.0f);
 	SetEvent(DYING, bind(&Enemy::EndDyingDT, this), 0.9f);
 	
 	FOR(totalEvent.size())
-	{
 		eventIters[i] = totalEvent[i].begin();
-	}
+
+	hpBar = new ProgressBar(L"Textures/UI/hp_bar.png", L"Textures/UI/hp_bar_BG.png");
 }
 
 Enemy::~Enemy()
 {
+	delete hpBar;
 }
 
 void Enemy::Update()
 {
 	if (!transform->Active()) return;
+	if (!target->Active())
+	{
+		SetState(IDLE);
+		return;
+	}
 
 	range = target->GlobalPos() - transform->GlobalPos();
 
@@ -33,9 +42,11 @@ void Enemy::Update()
 	test();
 	Move();
 	Attack();
-	Dead();
+	//Dead();
+	UpdateHpBar();
 
 	collider->UpdateWorld();
+	weaponCollider->UpdateWorld();
 }
 
 void Enemy::Render()
@@ -43,10 +54,15 @@ void Enemy::Render()
 	if (!transform->Active()) return;
 
 	collider->Render();
+
+	weaponCollider->Render();
 }
 
 void Enemy::PostRender()
 {
+	if (!CAM->ContainPoint(barPos)) return;
+
+	hpBar->Render();
 }
 
 void Enemy::Spawn(Vector3 pos)
@@ -95,10 +111,9 @@ void Enemy::ExcuteEvent()
 
 void Enemy::test()
 {
+	destPos = target->GlobalPos();
 	if(range.Length() < chaseRange)
 	{
-		destPos = target->GlobalPos();
-
 		if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
 		{
 			SetPath();
@@ -125,26 +140,12 @@ void Enemy::Move()
 	if (curState == HITTED) return;
 	if (curState == DYING) return;
 
-	/*destPos = target->GlobalPos();
-
-	if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
-	{
-		SetPath();
-	}
-	else
-	{
-		path.clear();
-		path.push_back(destPos);
-	}*/
-	
-
 	if (path.empty())
 	{
 		SetState(IDLE);
 		return;
 	}
 
-	
 	Vector3 dest = path.back();
 
 	Vector3 direction = dest - transform->GlobalPos();
@@ -160,24 +161,6 @@ void Enemy::Move()
 	transform->Pos() += velocitiy * speed * DELTA;
 	transform->Rot().y = atan2(velocitiy.x, velocitiy.z);
 }
-
-//void Enemy::Move()
-//{
-//	if (!transform->Active()) return;
-//	if (velocity.Length() < attackRange) return;
-//	if (curState == ATTACK) return;
-//	if (curState == ATTACK1) return;
-//	if (curState == HITTED) return;
-//	if (curState == DYING) return;
-//
-//	if (velocity.Length() < chaseRange)
-//	{
-//		SetState(MOVE);
-//	}
-//
-//	transform->Pos() += velocity.GetNormalized() * speed * DELTA;
-//	transform->Rot().y = atan2(velocity.x, velocity.z);
-//}
 
 void Enemy::Attack()
 {
@@ -201,9 +184,22 @@ void Enemy::Dead()
 		SetState(DYING);
 }
 
+void Enemy::UpdateHpBar()
+{
+	barPos = transform->Pos() + Vector3(0, 12.0f, 0);
+
+	hpBar->Pos() = CAM->WorldToScreen(barPos);
+	float scale = 100.0f / range.Length();
+	scale = Clamp(0.3f, 0.3f, scale);
+	hpBar->Scale() = { scale, scale, scale };
+	hpBar->UpdateWorld();
+}
+
 void Enemy::ComboAttack()
 {
 	if (curState == HITTED) return;
+
+	EndAttack();
 
 	SetState(ATTACK1);
 }
@@ -211,6 +207,8 @@ void Enemy::ComboAttack()
 void Enemy::SetIdle()
 {
 	if (curState == DYING) return;
+
+	EndAttack();
 
 	SetState(IDLE);
 }
@@ -220,7 +218,18 @@ void Enemy::Hitted()
 	if (curState == DYING) return;
 
 	SetState(HITTED);
-	curHp -= 20.0f;
+	curHp -= target->GetDmg();
+	hpBar->SetAmount(curHp / maxHp);
+
+	instancing->PlayClip(index, HITTED);
+	eventIters[HITTED] = totalEvent[HITTED].begin();
+}
+
+void Enemy::isDead()
+{
+	SetState(DYING);
+
+
 }
 
 void Enemy::EndDyingDC()
@@ -231,6 +240,16 @@ void Enemy::EndDyingDC()
 void Enemy::EndDyingDT()
 {
 	transform->SetActive(false);
+}
+
+void Enemy::StartAttack()
+{
+	weaponCollider->SetActive(true);
+}
+
+void Enemy::EndAttack()
+{
+	weaponCollider->SetActive(false);
 }
 
 void Enemy::SetPath()

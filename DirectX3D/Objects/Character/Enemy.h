@@ -25,9 +25,12 @@ public:
     void Spawn(Vector3 pos);
 
     CapsuleCollider* GetCollider() { return collider; }
+    BoxCollider* GetAtkCollider() { return weaponCollider; }
     Transform* GetTransform() { return transform; }
+    float GetDmg() { return dmg; }
+    float GetHp() { return curHp; }
 
-    void SetTarget(Transform* target) { this->target = target; }
+    void SetTarget(Revenant* target) { this->target = target; }
 
     void SetState(State state);
 
@@ -44,32 +47,41 @@ private:
     void Attack();
     void Dead();
 
+    void UpdateHpBar();
+
+public:
+    void Hitted();
+    void isDead();
+    void EndAttack();
+
 //Event Fucntion
 private:
     void ComboAttack();
     void SetIdle();
-
-public:
-    void Hitted();
-
-private:
     void EndDyingDC();
     void EndDyingDT();
+    void StartAttack();
+    
 
 protected:
+    float dmg;
+
     Vector3 pos;
     Transform* transform;
     CapsuleCollider* collider;
+
+    Transform* arms;
+    BoxCollider* weaponCollider;
 
     ModelAnimatorInstancing* instancing;
     ModelAnimatorInstancing::Motion* motion;
 
     Transform* root;
     ProgressBar* hpBar;
-    Transform* target;
+    Revenant* target;
 
     float speed;
-    float curHp = 100.0f;
+    float curHp = 50.0f;
     float maxHp = 100.0f;
 
     float attackRange = 10.0f;
@@ -78,7 +90,6 @@ protected:
     Vector3 barPos;
 
     Vector3 range;
-
 
     Vector3 destPos;
     vector<Vector3> path;

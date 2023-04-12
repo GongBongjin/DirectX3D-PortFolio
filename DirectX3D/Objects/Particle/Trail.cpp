@@ -81,6 +81,19 @@ void Trail::Render()
     blendState[0]->SetState();
 }
 
+void Trail::SetPos(Vector3 pos)
+{
+    vector<VertexUV>& vertices = mesh->GetVertices();
+
+    for (UINT i = 0; i <= width; i++)
+    {
+        vertices[i * 2].pos = pos;
+        vertices[i * 2 + 1].pos = pos;
+    }
+
+    mesh->UpdateVertex();
+}
+
 void Trail::CreateMesh()
 {
     mesh = new Mesh<VertexUV>();
