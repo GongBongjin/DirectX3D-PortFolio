@@ -160,6 +160,7 @@ void EnemyManager::Collision()
 	{
 		if (enemy->GetAtkCollider()->IsCollision(target->GetBodyCollider()))
 		{
+			ParticleManager::Get()->Play("CommonHit", enemy->GetAtkCollider()->GlobalPos());
 			enemy->EndAttack();
 
 			target->Hitted(enemy->GetDmg());

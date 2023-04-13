@@ -42,7 +42,6 @@ void Enemy::Update()
 	test();
 	Move();
 	Attack();
-	//Dead();
 	UpdateHpBar();
 
 	collider->UpdateWorld();
@@ -62,7 +61,13 @@ void Enemy::PostRender()
 {
 	if (!CAM->ContainPoint(barPos)) return;
 
-	hpBar->Render();
+	if (!transform->Active()) return;
+
+	if (hpBarTime > 0.0f)
+	{
+		hpBar->Render();
+		hpBarTime -= DELTA;
+	}
 }
 
 void Enemy::Spawn(Vector3 pos)
@@ -72,7 +77,10 @@ void Enemy::Spawn(Vector3 pos)
 
 	SetState(IDLE);
 
+	isHitted = false;
+
 	curHp = maxHp;
+	hpBar->SetAmount(curHp / maxHp);
 
 	transform->Pos() = pos;
 }
@@ -111,7 +119,14 @@ void Enemy::ExcuteEvent()
 
 void Enemy::test()
 {
+	if (!transform->Active()) 
+	{
+		path.clear();
+		return;
+	}
+
 	destPos = target->GlobalPos();
+
 	if(range.Length() < chaseRange)
 	{
 		if (aStar->IsCollisionObstacle(transform->GlobalPos(), destPos))
@@ -218,8 +233,10 @@ void Enemy::Hitted()
 	if (curState == DYING) return;
 
 	SetState(HITTED);
+
 	curHp -= target->GetDmg();
 	hpBar->SetAmount(curHp / maxHp);
+	hpBarTime = 3.0f;
 
 	instancing->PlayClip(index, HITTED);
 	eventIters[HITTED] = totalEvent[HITTED].begin();
@@ -228,8 +245,6 @@ void Enemy::Hitted()
 void Enemy::isDead()
 {
 	SetState(DYING);
-
-
 }
 
 void Enemy::EndDyingDC()

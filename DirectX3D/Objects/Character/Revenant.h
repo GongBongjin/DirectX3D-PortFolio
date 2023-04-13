@@ -62,6 +62,7 @@ private:
 private:
     void SetIdle();
     void SetDead();
+    void SetReloadParticle();
 
 
 private:

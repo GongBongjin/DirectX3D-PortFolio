@@ -9,7 +9,6 @@ private:
     ~Environment();
 
 public:
-
     void Update();
     void GUIRender();
 

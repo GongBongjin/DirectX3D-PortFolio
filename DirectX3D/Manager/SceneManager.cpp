@@ -15,6 +15,16 @@ void SceneManager::Update()
 {
     for (Scene* scene : curScenes)
         scene->Update();
+
+    if (addScenes.size() > 0)
+    {
+        AddScene();
+    }
+
+    if (removeScenes.size() > 0)
+    {
+        RemoveScene();
+    }
 }
 
 void SceneManager::PreRender()
@@ -54,13 +64,7 @@ Scene* SceneManager::Add(string key)
     if (scenes.count(key) == 0)
         return nullptr;
 
-    list<Scene*>::iterator findScene = find(curScenes.begin(), curScenes.end(), scenes[key]);
-
-    if (findScene != curScenes.end())
-        return  scenes[key];
-
-    curScenes.push_back(scenes[key]);
-    curScenes.back()->Start();
+    addScenes.push_back(key);
 
     return scenes[key];
 }
@@ -70,11 +74,37 @@ void SceneManager::Remove(string key)
     if (scenes.count(key) == 0)
         return;
 
-    list<Scene*>::iterator findScene = find(curScenes.begin(), curScenes.end(), scenes[key]);
+    removeScenes.push_back(key);
+}
 
-    if (findScene == curScenes.end())
-        return;
+void SceneManager::AddScene()
+{
+    for (string scene : addScenes)
+    {
+        list<Scene*>::iterator findScene = find(curScenes.begin(), curScenes.end(), scenes[scene]);
 
-    scenes[key]->End();
-    curScenes.erase(findScene);
+        if (findScene != curScenes.end())
+            continue;
+
+        curScenes.push_back(scenes[scene]);
+        curScenes.back()->Start();
+    }
+
+    addScenes.clear();
+}
+
+void SceneManager::RemoveScene()
+{
+    for (string scene : removeScenes)
+    {
+        list<Scene*>::iterator findScene = find(curScenes.begin(), curScenes.end(), scenes[scene]);
+
+        if (findScene == curScenes.end())
+            continue;
+
+        scenes[scene]->End();
+        curScenes.erase(findScene);
+    }
+
+    removeScenes.clear();
 }

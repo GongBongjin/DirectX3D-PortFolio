@@ -16,6 +16,7 @@ public:
 
 	CapsuleCollider* GetCollider() { return collider; }
 	Transform* GetTransform() { return transform; }
+	Trail* GetTrail() { return trail; }
 
 private:
 	Transform* transform;

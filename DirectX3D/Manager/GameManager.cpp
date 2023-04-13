@@ -18,15 +18,17 @@ GameManager::GameManager()
 {
     Create();
 
-    SceneManager::Get()->Create("Grid", new GridScene());
+    //SceneManager::Get()->Create("Grid", new GridScene());
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene());
     //SceneManager::Get()->Create("Start", new ModelRenderScene());
     //SceneManager::Get()->Create("Start", new ModelAnimationScene());
     //SceneManager::Get()->Create("Start", new TerrainEditorScene());
+    //SceneManager::Get()->Create("Start", new ParticleScene());
+    //SceneManager::Get()->Create("Start", new ParticleToolScene());
     SceneManager::Get()->Create("Start", new MainScene());
     //SceneManager::Get()->Create("Start", new TestScene());
 
-    SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
 }
 

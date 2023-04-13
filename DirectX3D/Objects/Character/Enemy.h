@@ -81,11 +81,13 @@ protected:
     Revenant* target;
 
     float speed;
-    float curHp = 50.0f;
+    float curHp;
     float maxHp = 100.0f;
 
     float attackRange = 10.0f;
-    float chaseRange = 40.0f;
+    float chaseRange = 50.0f;
+
+    float hpBarTime = 0.0f;
 
     Vector3 barPos;
 
@@ -100,4 +102,6 @@ protected:
 
     Terrain* terrain;
     AStar* aStar;
+
+    bool isHitted;
 };

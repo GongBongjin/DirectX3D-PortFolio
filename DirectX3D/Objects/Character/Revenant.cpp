@@ -41,6 +41,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     GetClip(ATTACK)->SetEvent(bind(&Revenant::Shoot, this), 0.75f);
     GetClip(ATTACK)->SetEvent(bind(&Revenant::SetIdle, this), 1.0f);
     GetClip(RELOAD)->SetEvent(bind(&Revenant::SetIdle, this), 0.70f);
+    GetClip(RELOAD)->SetEvent(bind(&Revenant::SetReloadParticle, this), 0.1f);
     GetClip(HITTED)->SetEvent(bind(&Revenant::SetIdle, this), 0.75f);
     GetClip(DYING)->SetEvent(bind(&Revenant::SetDead, this), 0.9f);
 }
@@ -233,6 +234,7 @@ void Revenant::Reload()
 
     if (KEY_DOWN(VK_RBUTTON))
     {
+        //ParticleManager::Get()->Play("Reload", gunShotPos->GlobalPos());
         SetState(RELOAD);
         shootCount = 0;
     }
@@ -402,4 +404,9 @@ void Revenant::SetDead()
     bodyCollider->SetActive(false);
 
     isActive = false;
+}
+
+void Revenant::SetReloadParticle()
+{
+    ParticleManager::Get()->Play("Reload", gunShotPos->GlobalPos());
 }

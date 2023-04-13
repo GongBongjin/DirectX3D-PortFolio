@@ -14,15 +14,11 @@ Bullet::Bullet(Transform* transform)
 	collider->SetTag("B_Collider");
 
 	startEdge = new Transform();
-	startEdge->SetParent(transform);
-	startEdge->Pos() = { 0,5,0 };
 
 	endEdge = new Transform();
-	endEdge->SetParent(transform);
-	endEdge->Pos() = { 0,-5,0 };
 
-	trail = new Trail(L"Textures/Effect/Trail.png", startEdge, endEdge, 1, 10.0f);
-	trail->SetParent(transform);
+	trail = new Trail(L"Textures/Effect/FireTrail0.png", startEdge, endEdge, 1, 10.0f);
+	//trail->SetParent(transform);
 }
 
 Bullet::~Bullet()
@@ -51,8 +47,8 @@ void Bullet::Update()
 
 	collider->UpdateWorld();
 
-	//startEdge->Pos() = transform->GlobalPos() + transform->Up() * 1.0f;
-	//endEdge->Pos() = transform->GlobalPos() - transform->Up() * 1.0f;
+	startEdge->Pos() = transform->GlobalPos() + transform->Right() * 2.0f;
+	endEdge->Pos() = transform->GlobalPos() - transform->Right() * 2.0f;
 
 	startEdge->UpdateWorld();
 	endEdge->UpdateWorld();

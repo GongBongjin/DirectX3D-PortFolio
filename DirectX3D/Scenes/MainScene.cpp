@@ -30,6 +30,9 @@ MainScene::MainScene()
 	revenant->GetBuildingCollider(BuildingManager::Get()->GetColliders());
 
 	skybox = new Skybox(L"Textures/Landscape/BlueSky.dds");
+
+	ParticleManager::Get()->Add("CommonHit", "TextData/Particles/CommonHit.fx", 30);
+	ParticleManager::Get()->Add("Reload", "TextData/Particles/Reload.fx", 30);
 }
 
 MainScene::~MainScene()
@@ -45,6 +48,8 @@ MainScene::~MainScene()
 	BulletManager::Delete();
 
 	EnemyManager::Delete();
+
+	ParticleManager::Delete();
 
 	delete skybox;
 }
@@ -62,6 +67,8 @@ void MainScene::Update()
 	BulletManager::Get()->Update();
 
 	EnemyManager::Get()->Update();
+
+	ParticleManager::Get()->Update();
 }
 
 void MainScene::PreRender()
@@ -70,11 +77,11 @@ void MainScene::PreRender()
 
 void MainScene::Render()
 {
-	//skybox->Render();
+	skybox->Render();
 	
-	//terrain->Render();
+	terrain->Render();
 
-	//aStar->Render();
+	aStar->Render();
 
 	BuildingManager::Get()->Render();
 
@@ -83,6 +90,8 @@ void MainScene::Render()
 	BulletManager::Get()->Render();
 	
 	EnemyManager::Get()->Render();
+
+	ParticleManager::Get()->Render();
 }
 
 void MainScene::PostRender()

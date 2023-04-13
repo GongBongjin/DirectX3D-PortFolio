@@ -65,7 +65,9 @@ bool BulletManager::IsCollision(Collider* collider)
 	{
 		if (bullet->GetCollider()->IsCollision(collider))
 		{
+			ParticleManager::Get()->Play("CommonHit", bullet->GetTransform()->GlobalPos());
 			bullet->GetTransform()->SetActive(false);
+			bullet->GetTrail()->SetActive(false);
 			return true;
 		}
 	}
