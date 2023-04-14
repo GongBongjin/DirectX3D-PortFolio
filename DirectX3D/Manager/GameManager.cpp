@@ -10,6 +10,7 @@
 #include "Scenes/ParticleScene.h"
 #include "Scenes/ParticleToolScene.h"
 
+#include "Scenes/StartScene.h"
 #include "Scenes/MainScene.h"
 #include "Scenes/BossScene.h"
 #include "Scenes/TestScene.h"
@@ -18,18 +19,20 @@ GameManager::GameManager()
 {
     Create();
 
-    //SceneManager::Get()->Create("Grid", new GridScene());
+    SceneManager::Get()->Create("Grid", new GridScene());
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene());
     //SceneManager::Get()->Create("Start", new ModelRenderScene());
     //SceneManager::Get()->Create("Start", new ModelAnimationScene());
-    //SceneManager::Get()->Create("Start", new TerrainEditorScene());
+    SceneManager::Get()->Create("Start", new TerrainEditorScene());
     //SceneManager::Get()->Create("Start", new ParticleScene());
     //SceneManager::Get()->Create("Start", new ParticleToolScene());
-    SceneManager::Get()->Create("Start", new MainScene());
+    //SceneManager::Get()->Create("Start", new StartScene());
+    //SceneManager::Get()->Create("Main", new MainScene());
     //SceneManager::Get()->Create("Start", new TestScene());
 
-    //SceneManager::Get()->Add("Grid");
+    SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
+    //SceneManager::Get()->Add("Main");
 }
 
 GameManager::~GameManager()
@@ -66,8 +69,8 @@ void GameManager::Render()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
     
-    string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
-    Font::Get()->RenderText(fps, { 100, WIN_HEIGHT - 10 });
+    string fps = "F P S : " + to_string(Timer::Get()->GetFPS());
+    //Font::Get()->RenderText(fps, { 120, WIN_HEIGHT - 10 });
     
     static bool isActive = true;
 

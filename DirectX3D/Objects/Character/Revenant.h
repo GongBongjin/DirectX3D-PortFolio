@@ -33,6 +33,7 @@ public:
     void PostRender();
     void GUIRender();
 
+    void SetPlayerAim();
     void GetTerrain(Terrain* terrain) { this->terrain = terrain; }
     void GetBuildingCollider(vector<BoxCollider*> buildingColliders) { this->buildingColliders = buildingColliders; }
 

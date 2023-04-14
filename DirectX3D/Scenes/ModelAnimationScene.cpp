@@ -4,16 +4,18 @@
 ModelAnimationScene::ModelAnimationScene()
 {
     modelAnimator = new ModelAnimator("Revenant");
-    //modelAnimator->GetMesh(0)->SetMaterial(modelAnimator->AddMaterial("Body"));
-    //modelAnimator->GetMesh(1)->SetMaterial(modelAnimator->AddMaterial("Arms"));
-    //modelAnimator->GetMesh(2)->SetMaterial(modelAnimator->AddMaterial("Jacket"));
-    //modelAnimator->GetMesh(3)->SetMaterial(modelAnimator->AddMaterial("Gun"));
-    //modelAnimator->GetMesh(4)->SetMaterial(modelAnimator->AddMaterial("Darkness"));
-    //modelAnimator->GetMesh(7)->SetMaterial(modelAnimator->AddMaterial("Weapon"));
 
-    modelAnimator->ReadClip("Dying");
+    modelAnimator->Scale() = { 0.5f, 0.5f, 0.5f };
+    modelAnimator->GetMesh(0)->SetMaterial(modelAnimator->AddMaterial("Body"));
+    modelAnimator->GetMesh(1)->SetMaterial(modelAnimator->AddMaterial("Arms"));
+    modelAnimator->GetMesh(2)->SetMaterial(modelAnimator->AddMaterial("Jacket"));
+    modelAnimator->GetMesh(3)->SetMaterial(modelAnimator->AddMaterial("Gun"));
+    modelAnimator->GetMesh(4)->SetMaterial(modelAnimator->AddMaterial("Darkness"));
+    modelAnimator->GetMesh(7)->SetMaterial(modelAnimator->AddMaterial("Weapon"));
+
+    //modelAnimator->ReadClip("Dying");
     //modelAnimator->ReadClip("MoveForward");
-    //modelAnimator->ReadClip("Attack");
+    modelAnimator->ReadClip("Attack");
     //modelAnimator->ReadClip("Attack1");
     //modelAnimator->ReadClip("Hitted");
     //modelAnimator->ReadClip("Reload");

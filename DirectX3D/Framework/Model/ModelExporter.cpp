@@ -51,7 +51,8 @@ void ModelExporter::ExportMesh()
 
 void ModelExporter::ExportClip(string clipName)
 {
-    FOR(scene->mNumAnimations)
+    //FOR(scene->mNumAnimations)
+    for(int i = 0; i<scene->mNumAnimations; i++)
     {
         Clip* clip = ReadClip(scene->mAnimations[i]);
         WriterClip(clip, clipName, i);
@@ -62,6 +63,7 @@ void ModelExporter::ReadMaterial()
 {
     for (UINT i = 0; i < scene->mNumMaterials; i++)
     {
+        //Assimp로 Import받아온 Material 정보 Read
         aiMaterial* srcMaterial = scene->mMaterials[i];
         Material* material = new Material();
 
@@ -103,6 +105,7 @@ void ModelExporter::ReadMaterial()
 
 void ModelExporter::WriteMaterial()
 {
+    //Read한 Material의 정보를 BinaryWriter를 이용하여 파일형태로 저장
     string savePath = "Models/Materials/" + name + "/";
     string file = name + ".mats";
 
@@ -241,7 +244,7 @@ void ModelExporter::ReadNode(aiNode* node, int index, int parent)
 
     nodes.push_back(nodeData);
 
-    FOR(node->mNumChildren)
+    for(int i = 0; i<node->mNumChildren; i++)
         ReadNode(node->mChildren[i], nodes.size(), index);
 }
 

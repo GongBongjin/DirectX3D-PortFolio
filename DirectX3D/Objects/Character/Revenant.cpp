@@ -9,8 +9,8 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     GetMesh(4)->SetMaterial(AddMaterial("Darkness"));
     GetMesh(7)->SetMaterial(AddMaterial("Weapon"));
 
-    curHp = 40.0f;
-    curMp = 80.0f;
+    curHp = maxHp;
+    curMp = maxMp;
 
     gun = new Transform();
     gunShotPos = new SphereCollider();
@@ -21,9 +21,7 @@ Revenant::Revenant() : ModelAnimator("Revenant")
     bodyCollider->SetTag("Revenant_Body");
     bodyCollider->SetParent(root);
     bodyCollider->Load();
-    
-    ClientToScreen(hWnd, &clientCenterPos);
-    
+   
     crossHair = new Quad(L"Textures/UI/cursor.png");
     crossHair->Pos() = { CENTER_X, CENTER_Y, 0 };
     crossHair->UpdateWorld();
@@ -104,9 +102,14 @@ void Revenant::PostRender()
 void Revenant::GUIRender()
 {
     Model::GUIRender();
-    //gun->GUIRender();
-    //bodyCollider->GUIRender();
+    gun->GUIRender();
+    bodyCollider->GUIRender();
     playerUI->GUIRender();
+}
+
+void Revenant::SetPlayerAim()
+{
+    ClientToScreen(hWnd, &clientCenterPos);
 }
 
 void Revenant::GetGold(UINT gold)
@@ -209,6 +212,7 @@ void Revenant::Attack()
     if (curState == ATTACK) return;
     if (curState == RELOAD) return;
     if (curState == DYING) return;
+    if (curMp < 10) return;
 
     if (KEY_DOWN(VK_LBUTTON))
     {
@@ -234,7 +238,6 @@ void Revenant::Reload()
 
     if (KEY_DOWN(VK_RBUTTON))
     {
-        //ParticleManager::Get()->Play("Reload", gunShotPos->GlobalPos());
         SetState(RELOAD);
         shootCount = 0;
     }
@@ -288,6 +291,7 @@ void Revenant::Shoot()
     if(shootCount <= maxShootCount)
     {
         BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
+        curMp -= 5.0f;
     }
 }
 

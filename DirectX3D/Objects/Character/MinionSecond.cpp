@@ -38,6 +38,8 @@ void MinionSecond::Update()
 {
 	if (!transform->Active()) return;
 
+	barPos = transform->Pos() + Vector3(0, 12.0f, 0);
+
 	root->SetWorld(instancing->GetTransformByNode(index, 0));
 
 	arms->SetWorld(instancing->GetTransformByNode(index, 38));

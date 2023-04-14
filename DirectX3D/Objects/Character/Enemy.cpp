@@ -201,8 +201,6 @@ void Enemy::Dead()
 
 void Enemy::UpdateHpBar()
 {
-	barPos = transform->Pos() + Vector3(0, 12.0f, 0);
-
 	hpBar->Pos() = CAM->WorldToScreen(barPos);
 	float scale = 100.0f / range.Length();
 	scale = Clamp(0.3f, 0.3f, scale);

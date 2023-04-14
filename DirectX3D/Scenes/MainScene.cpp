@@ -15,11 +15,10 @@ MainScene::MainScene()
 	revenant = new Revenant();
 	revenant->SetTag("Revenant");
 	revenant->Load();
+	revenant->SetPlayerAim();
 	revenant->GetTerrain(terrain);
-	
 	CAM->SetTarget(revenant);
-	CAM->TargetOptionLoad("test8");
-	CAM->LookAtTarget();
+	CAM->TargetOptionLoad("test9");	
 
 	BulletManager::Get();
 	EnemyManager::Get();
@@ -107,11 +106,11 @@ void MainScene::GUIRender()
 
 	//BuildingManager::Get()->GUIRender();
 
-	//revenant->GUIRender();
+	revenant->GUIRender();
 
 	//BulletManager::Get()->GUIRender();
 
-	EnemyManager::Get()->GUIRender();
+	//EnemyManager::Get()->GUIRender();
 }
 
 void MainScene::Start()

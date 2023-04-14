@@ -39,13 +39,9 @@ TerrainEditor::~TerrainEditor()
 void TerrainEditor::Update()
 {
     if (ComputePicking(pickingPos))
-    {
         brushBuffer->Get().pickingPos = pickingPos;
-    }
     else
-    {
         return;
-    }
 
     if (KEY_PRESS(VK_LBUTTON) && !ImGui::GetIO().WantCaptureMouse)
     {
@@ -129,14 +125,10 @@ Vector3 TerrainEditor::Picking()
 
             float distance = 0.0f;
             if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
-            {
                 return ray.pos + ray.dir * distance;
-            }
 
             if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
-            {
                 return ray.pos + ray.dir * distance;
-            }
         }
     }
 
@@ -145,6 +137,7 @@ Vector3 TerrainEditor::Picking()
 
 bool TerrainEditor::ComputePicking(Vector3& pos)
 {
+    //Ray를 통해 Terrain 식별
     Ray ray = CAM->ScreenPointToRay(mousePos);
 
     rayBuffer->Get().pos = ray.pos;

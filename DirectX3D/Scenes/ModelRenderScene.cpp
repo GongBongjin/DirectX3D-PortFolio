@@ -3,11 +3,12 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-    model = new Model("Super");
+    model = new Model("Second");
     model->Rot().x = XM_PIDIV2;
-    //model->GetMesh(0)->SetMaterial(model->AddMaterial("Main"));
-    //model->GetMesh(0)->SetMaterial(model->AddMaterial("Torso"));
-    //model->GetMesh(1)->SetMaterial(model->AddMaterial("Limbs"));
+    model->Scale() = { 0.5f, 0.5f, 0.5f };
+
+    //model->GetMesh(0)->SetMaterial(model->AddMaterial("Body"));
+    //model->GetMesh(1)->SetMaterial(model->AddMaterial("Arms"));
     //model->GetMesh(2)->SetMaterial(model->AddMaterial("Jacket"));
     //model->GetMesh(3)->SetMaterial(model->AddMaterial("Gun"));
     //model->GetMesh(4)->SetMaterial(model->AddMaterial("Darkness"));

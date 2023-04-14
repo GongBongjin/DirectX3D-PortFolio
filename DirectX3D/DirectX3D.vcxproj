@@ -255,6 +255,7 @@
     <ClInclude Include="Scenes\ParticleScene.h" />
     <ClInclude Include="Scenes\ParticleToolScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\StartScene.h" />
     <ClInclude Include="Scenes\TerrainEditorScene.h" />
     <ClInclude Include="Scenes\TerrainScene.h" />
     <ClInclude Include="Scenes\TestScene.h" />
@@ -366,6 +367,7 @@
     <ClCompile Include="Scenes\ModelRenderScene.cpp" />
     <ClCompile Include="Scenes\ParticleScene.cpp" />
     <ClCompile Include="Scenes\ParticleToolScene.cpp" />
+    <ClCompile Include="Scenes\StartScene.cpp" />
     <ClCompile Include="Scenes\TerrainEditorScene.cpp" />
     <ClCompile Include="Scenes\TerrainScene.cpp" />
     <ClCompile Include="Scenes\TestScene.cpp" />
