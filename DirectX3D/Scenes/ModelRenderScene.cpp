@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-    model = new Model("Second");
+    model = new Model("First");
     model->Rot().x = XM_PIDIV2;
     model->Scale() = { 0.5f, 0.5f, 0.5f };
 

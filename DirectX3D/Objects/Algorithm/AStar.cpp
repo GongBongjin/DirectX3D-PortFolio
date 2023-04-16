@@ -128,10 +128,11 @@ int AStar::FindRandomPos(Vector3 pos, float range)
 
 void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
 {
+    //시작 노드 초기화
     Reset();
     path.clear();
 
-    //1. 시작노드 초기화하고 오픈노드에 추가
+    //오픈노드에 추가
     float G = 0;
     float H = GetDiagonalManhattanDistance(start, end);
 
@@ -141,24 +142,19 @@ void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
     nodes[start]->via = start;
     nodes[start]->state = Node::OPEN;
 
-    //openNodes.push_back(start);
     heap->Insert(nodes[start]);
 
     while (nodes[end]->state != Node::CLOSED)
     {
-        //if (openNodes.empty())
         if(heap->Empty())
             return;
-
-        //2. 오픈노드 중에서 효율이 가장 좋은 노드 찾기
+        //오픈노드 중 최적의 노드 검색
         int curIndex = GetMinNode();
-        //3. 찾은 노드와 연결된 노드의 정보 갱신후 오픈노드에 추가하고
-        //확장이 끝난 노드는 닫기
+        //찾은 노드와 연결된 노드 정보 갱신, 오픈노드에 추가
         Extend(curIndex, end);
         nodes[curIndex]->state = Node::CLOSED;
     }
-
-    //5. BackTracking
+    //백트랙킹
     int curIndex = end;
 
     while (curIndex != start)
@@ -167,8 +163,6 @@ void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
         path.push_back(nodes[curIndex]->GlobalPos());
         curIndex = nodes[curIndex]->via;
     }
-
-    //path.push_back(nodes[start]->pos);
 }
 
 void AStar::MakeDirectPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>& path)

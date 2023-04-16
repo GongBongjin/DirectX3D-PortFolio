@@ -96,7 +96,7 @@ void MainScene::Render()
 void MainScene::PostRender()
 {
 	revenant->PostRender();
-
+	
 	EnemyManager::Get()->PostRender();
 }
 
@@ -106,7 +106,7 @@ void MainScene::GUIRender()
 
 	//BuildingManager::Get()->GUIRender();
 
-	revenant->GUIRender();
+	//revenant->GUIRender();
 
 	//BulletManager::Get()->GUIRender();
 

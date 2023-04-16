@@ -220,6 +220,7 @@ void Revenant::Attack()
         {
             SetState(RELOAD);
             shootCount = 0;
+            curMp -= 10.0f;
             return;
         }
 
@@ -240,6 +241,7 @@ void Revenant::Reload()
     {
         SetState(RELOAD);
         shootCount = 0;
+        curMp -= 10.0f;
     }
 }
 
@@ -291,7 +293,6 @@ void Revenant::Shoot()
     if(shootCount <= maxShootCount)
     {
         BulletManager::Get()->Shoot(gunShotPos->GlobalPos(), dir.GetNormalized());
-        curMp -= 5.0f;
     }
 }
 

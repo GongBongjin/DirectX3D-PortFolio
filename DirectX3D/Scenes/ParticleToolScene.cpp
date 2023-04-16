@@ -181,6 +181,7 @@ void ParticleToolScene::Init()
 
 void ParticleToolScene::Save(string file)
 {
+    //ParticleData 수치 및 Material 저장
     BinaryWriter* writer = new BinaryWriter(file);
 
     writer->WString(quad->GetMaterial()->GetDiffuseMap()->GetFile());
@@ -192,6 +193,7 @@ void ParticleToolScene::Save(string file)
 
 void ParticleToolScene::Load(string file)
 {
+    //저장한 파일 로드
     BinaryReader* reader = new BinaryReader(file);
 
     wstring textureFile = reader->WString();

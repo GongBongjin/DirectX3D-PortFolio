@@ -122,6 +122,11 @@ void Inventory::FontSet()
 	Font::Get()->RenderText(PrintFloat(hpRecoveryValue), { 465.0f, 324.0f });
 	Font::Get()->RenderText(PrintFloat(mpRecoveryValue), { 465.0f, 296.0f});
 	Font::Get()->RenderText(PrintFloat(moveSpeed), { 465.0f, 187.0f });
+	
+	Font::Get()->RenderText(to_string(50), { 530.0f, 512.0f });
+	Font::Get()->RenderText(to_string(50), { 575.0f, 512.0f });
+	Font::Get()->RenderText(to_string(150), { 535.0f, 370.0f });
+	Font::Get()->RenderText(to_string(100), { 580.0f, 370.0f });
 
 	for(int i = 0; i<invenItems.size(); i++)
 	{

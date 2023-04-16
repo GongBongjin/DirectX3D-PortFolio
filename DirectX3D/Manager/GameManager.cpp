@@ -19,18 +19,18 @@ GameManager::GameManager()
 {
     Create();
 
-    SceneManager::Get()->Create("Grid", new GridScene());
+    //SceneManager::Get()->Create("Grid", new GridScene());
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene());
     //SceneManager::Get()->Create("Start", new ModelRenderScene());
     //SceneManager::Get()->Create("Start", new ModelAnimationScene());
-    SceneManager::Get()->Create("Start", new TerrainEditorScene());
+    //SceneManager::Get()->Create("Start", new TerrainEditorScene());
     //SceneManager::Get()->Create("Start", new ParticleScene());
     //SceneManager::Get()->Create("Start", new ParticleToolScene());
-    //SceneManager::Get()->Create("Start", new StartScene());
-    //SceneManager::Get()->Create("Main", new MainScene());
+    SceneManager::Get()->Create("Start", new StartScene());
+    SceneManager::Get()->Create("Main", new MainScene());
     //SceneManager::Get()->Create("Start", new TestScene());
 
-    SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
     //SceneManager::Get()->Add("Main");
 }
@@ -67,23 +67,23 @@ void GameManager::Render()
 
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
+   // ImGui::NewFrame();
     
-    string fps = "F P S : " + to_string(Timer::Get()->GetFPS());
+    //string fps = "F P S : " + to_string(Timer::Get()->GetFPS());
     //Font::Get()->RenderText(fps, { 120, WIN_HEIGHT - 10 });
-    
-    static bool isActive = true;
-
-    if (isActive)
-    {
-        ImGui::Begin("Inspector", &isActive);
-        Environment::Get()->GUIRender();
-        SceneManager::Get()->GUIRender();
-        ImGui::End();
-    }    
-
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    //
+    //static bool isActive = true;
+    //
+    //if (isActive)
+    //{
+    //    ImGui::Begin("Inspector", &isActive);
+    //    Environment::Get()->GUIRender();
+    //    SceneManager::Get()->GUIRender();
+    //    ImGui::End();
+    //}    
+    //
+    //ImGui::Render();
+    //ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     
     Font::Get()->GetDC()->EndDraw();
 

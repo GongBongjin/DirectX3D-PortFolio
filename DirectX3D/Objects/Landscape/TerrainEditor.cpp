@@ -137,7 +137,7 @@ Vector3 TerrainEditor::Picking()
 
 bool TerrainEditor::ComputePicking(Vector3& pos)
 {
-    //Ray를 통해 Terrain 식별
+    //Ray를 통해 지형 삼각형 식별
     Ray ray = CAM->ScreenPointToRay(mousePos);
 
     rayBuffer->Get().pos = ray.pos;
@@ -148,13 +148,13 @@ bool TerrainEditor::ComputePicking(Vector3& pos)
 
     DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV());
     DC->CSSetUnorderedAccessViews(0, 1, &structuredBuffer->GetUAV(), nullptr);
-
+    
     computeShader->Set();
 
     UINT x = ceil((float)triangleSize / 64.0f);
 
     DC->Dispatch(x, 1, 1);
-
+    //컴퓨트쉐이더가 실행 후 CPU로 복사하여 처리
     structuredBuffer->Copy(outputs.data(), sizeof(OutputDesc) * triangleSize);
 
     float minDistance = FLT_MAX;
